@@ -33,6 +33,6 @@
     }
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   }
 }
