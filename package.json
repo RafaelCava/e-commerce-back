@@ -7,5 +7,8 @@
     "email": "ra.facavalcante@hotmail.com",
     "name": "Rafael Cavalcante",
     "url": "https://devrafaelcavalcante.me"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
   }
 }
