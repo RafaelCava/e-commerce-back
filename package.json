@@ -1,0 +1,11 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "email": "ra.facavalcante@hotmail.com",
+    "name": "Rafael Cavalcante",
+    "url": "https://devrafaelcavalcante.me"
+  }
+}

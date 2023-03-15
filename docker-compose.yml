@@ -1,0 +1,24 @@
+version: '3.7'
+
+networks:
+  kong-fc:
+    external: true
+
+services:
+  e-commerce-back:
+    build:
+      dockerfile: ./.docker/dockerfiles/Dockerfile
+      context: .
+    container_name: e-commerce-back
+    restart: "on-failure"
+    environment:
+      NODE_ENV: develop
+      PORT: 3033
+    ports:
+      - 3033:3033
+    volumes:
+      - .:/usr/e-commerce-back/app
+    networks:
+      - kong-fc
+    extra_hosts:
+      - host.docker.internal:host-gateway
