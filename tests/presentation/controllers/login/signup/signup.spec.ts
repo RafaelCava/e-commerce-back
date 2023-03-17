@@ -1,16 +1,10 @@
-import { mockAddAccountParams, mockAddAccountRequest, mockAccount } from '../../../../domain/mocks/mock-account'
 import { type AddAccount } from '../../../../../src/domain/usecases/account/add-account'
+import { mockAddAccountParams, mockAddAccountRequest, mockAccount } from '../../../../domain/mocks/mock-account'
 import { type EmailValidator } from '../../../../../src/presentation/protocols'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../../../src/presentation/errors'
-import { badRequest, serverError } from '../../../../../src/presentation/helpers/http-helper'
+import { badRequest, serverError, forbidden } from '../../../../../src/presentation/helpers/http-helper'
 import { EmailValidatorSpy } from '../../../mocks/email-validator'
-
-type SutTypes = {
-  sut: SignUpController
-  emailValidatorSpy: EmailValidator
-  addAccountSpy: AddAccount
-}
 
 const AddAccountSpy = (): AddAccount => {
   class AddAccountSpy implements AddAccount {
@@ -20,6 +14,12 @@ const AddAccountSpy = (): AddAccount => {
   }
 
   return new AddAccountSpy()
+}
+
+type SutTypes = {
+  sut: SignUpController
+  emailValidatorSpy: EmailValidator
+  addAccountSpy: AddAccount
 }
 
 const makeSut = (): SutTypes => {
@@ -160,14 +160,19 @@ describe('SignUp Controller', () => {
     const { sut, addAccountSpy } = makeSut()
     jest.spyOn(addAccountSpy, 'add').mockImplementationOnce(throwError)
     const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'invalid_email@gmail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password'
-      }
+      body: mockAddAccountRequest()
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  it('Should return 403 if AddAccount return null', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    jest.spyOn(addAccountSpy, 'add').mockReturnValueOnce(Promise.resolve(null))
+    const httpRequest = {
+      body: mockAddAccountRequest()
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(forbidden(new Error()))
   })
 })

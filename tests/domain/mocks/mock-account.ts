@@ -1,5 +1,5 @@
 import { type AddAccount } from './../../../src/domain/usecases/account/add-account'
-import { type AddAccountRequest } from '../../../src/domain/usecases/account/add-account-request'
+import { type AddAccountRequest } from '../../presentation/dto/add-account-request-dto'
 import { type AccountModel } from '../../../src/domain/models/account'
 
 export const mockAccount = (): AccountModel => ({

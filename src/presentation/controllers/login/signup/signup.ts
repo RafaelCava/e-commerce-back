@@ -1,8 +1,8 @@
 import { type AddAccount } from '../../../../domain/usecases/account/add-account'
-import { type AddAccountRequest } from '../../../../domain/usecases/account/add-account-request'
+import { type AddAccountRequest } from '../../../dto/add-account-request-dto'
 import { type Controller, type HttpRequest, type HttpResponse, type EmailValidator } from '../../../protocols'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../errors'
-import { badRequest, serverError } from '../../../helpers/http-helper'
+import { badRequest, serverError, forbidden } from '../../../helpers/http-helper'
 export class SignUpController implements Controller {
   constructor (private readonly emailValidator: EmailValidator, private readonly addAccount: AddAccount) {}
   async handle (httpRequest: HttpRequest<AddAccountRequest>): Promise<HttpResponse<Error> | null> {
@@ -20,7 +20,8 @@ export class SignUpController implements Controller {
       if (!this.emailValidator.isValid(email)) {
         return badRequest(new InvalidParamError('email'))
       }
-      await this.addAccount.add({ email, password, name })
+      const account = await this.addAccount.add({ email, password, name })
+      if (!account) return forbidden(new Error())
       return null
     } catch (error) {
       return serverError(new ServerError(error))
