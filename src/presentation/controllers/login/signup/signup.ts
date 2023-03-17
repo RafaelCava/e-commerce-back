@@ -1,8 +1,13 @@
-import { type AddAccount } from '../../../../domain/usecases/account/add-account'
-import { type AddAccountRequest } from '../../../dto/add-account-request-dto'
-import { type Controller, type HttpRequest, type HttpResponse, type EmailValidator } from '../../../protocols'
+import {
+  type Controller,
+  type HttpRequest,
+  type HttpResponse,
+  type EmailValidator,
+  type AddAccountRequest,
+  type AddAccount
+} from './signup-protocols'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../errors'
-import { badRequest, serverError, forbidden } from '../../../helpers/http-helper'
+import { badRequest, forbidden, serverError } from '../../../helpers/http-helper'
 export class SignUpController implements Controller {
   constructor (private readonly emailValidator: EmailValidator, private readonly addAccount: AddAccount) {}
   async handle (httpRequest: HttpRequest<AddAccountRequest>): Promise<HttpResponse<Error> | null> {

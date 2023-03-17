@@ -1,6 +1,6 @@
 import { type AddAccount } from '../../../../../src/domain/usecases/account/add-account'
-import { mockAddAccountParams, mockAddAccountRequest, mockAccount } from '../../../../domain/mocks/mock-account'
-import { type EmailValidator } from '../../../../../src/presentation/protocols'
+import { mockAddAccountParams, mockAddAccountRequest, mockAccount, throwError } from '../../../../domain/mocks'
+import { type EmailValidator } from '../../../../../src/presentation/protocols/email-validator'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../../../src/presentation/errors'
 import { badRequest, serverError, forbidden } from '../../../../../src/presentation/helpers/http-helper'
@@ -31,10 +31,6 @@ const makeSut = (): SutTypes => {
     emailValidatorSpy,
     addAccountSpy
   }
-}
-
-const throwError = (): never => {
-  throw new Error()
 }
 
 describe('SignUp Controller', () => {
