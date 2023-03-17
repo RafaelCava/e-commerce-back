@@ -1,3 +1,5 @@
+import { mockAddAccountParams, mockAddAccountRequest, mockAccount } from '../../../../domain/mocks/mock-account'
+import { type AddAccount } from '../../../../../src/domain/usecases/account/add-account'
 import { type EmailValidator } from '../../../../../src/presentation/protocols'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../../../src/presentation/errors'
@@ -7,14 +9,27 @@ import { EmailValidatorSpy } from '../../../mocks/email-validator'
 type SutTypes = {
   sut: SignUpController
   emailValidatorSpy: EmailValidator
+  addAccountSpy: AddAccount
+}
+
+const AddAccountSpy = (): AddAccount => {
+  class AddAccountSpy implements AddAccount {
+    async add (account: AddAccount.Params): Promise<AddAccount.Result> {
+      return await Promise.resolve(mockAccount())
+    }
+  }
+
+  return new AddAccountSpy()
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorSpy = EmailValidatorSpy()
-  const sut = new SignUpController(emailValidatorSpy)
+  const addAccountSpy = AddAccountSpy()
+  const sut = new SignUpController(emailValidatorSpy, addAccountSpy)
   return {
     sut,
-    emailValidatorSpy
+    emailValidatorSpy,
+    addAccountSpy
   }
 }
 
@@ -108,15 +123,10 @@ describe('SignUp Controller', () => {
     const { sut, emailValidatorSpy } = makeSut()
     const isValidSpy = jest.spyOn(emailValidatorSpy, 'isValid')
     const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@gmail.com',
-        password: 'any_password',
-        passwordConfirmation: 'any_password'
-      }
+      body: mockAddAccountRequest()
     }
     await sut.handle(httpRequest)
-    expect(isValidSpy).toBeCalledWith(httpRequest.body.email)
+    expect(isValidSpy).toHaveBeenCalledWith(httpRequest.body.email)
     expect(isValidSpy).toBeCalledTimes(1)
   })
 
@@ -133,5 +143,16 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  it('Should call AddAccount with correct values', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const addSpy = jest.spyOn(addAccountSpy, 'add')
+    const httpRequest = {
+      body: mockAddAccountRequest()
+    }
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith(mockAddAccountParams())
+    expect(addSpy).toBeCalledTimes(1)
   })
 })
