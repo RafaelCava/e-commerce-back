@@ -1,20 +1,10 @@
 import { type AddAccount } from '../../../../../src/domain/usecases/account/add-account'
-import { mockAddAccountParams, mockAddAccountRequest, mockAccount, throwError } from '../../../../domain/mocks'
+import { mockAddAccountParams, mockAddAccountRequest, throwError } from '../../../../domain/mocks'
 import { type EmailValidator } from '../../../../../src/presentation/protocols/email-validator'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { MissingParamError, InvalidParamError, ServerError } from '../../../../../src/presentation/errors'
 import { badRequest, serverError, forbidden } from '../../../../../src/presentation/helpers/http-helper'
-import { EmailValidatorSpy } from '../../../mocks/email-validator'
-
-const AddAccountSpy = (): AddAccount => {
-  class AddAccountSpy implements AddAccount {
-    async add (account: AddAccount.Params): Promise<AddAccount.Result> {
-      return await Promise.resolve(mockAccount())
-    }
-  }
-
-  return new AddAccountSpy()
-}
+import { EmailValidatorSpy, AddAccountSpy } from '../../../mocks'
 
 type SutTypes = {
   sut: SignUpController
