@@ -155,4 +155,19 @@ describe('SignUp Controller', () => {
     expect(addSpy).toHaveBeenCalledWith(mockAddAccountParams())
     expect(addSpy).toBeCalledTimes(1)
   })
+
+  it('Should return 500 if AddAccount throw', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    jest.spyOn(addAccountSpy, 'add').mockImplementationOnce(throwError)
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'invalid_email@gmail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
 })
