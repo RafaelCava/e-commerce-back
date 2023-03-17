@@ -1,5 +1,6 @@
-export class SignUpController {
-  async handle (httpRequest: any): Promise<any> {
+import { type Controller, type HttpRequest, type HttpResponse } from '../../../protocols'
+export class SignUpController implements Controller {
+  async handle (httpRequest: HttpRequest<any>): Promise<HttpResponse<any>> {
     if (!httpRequest.body.name) {
       return {
         statusCode: 400,
