@@ -15,7 +15,7 @@ export class SignUpController implements Controller<SignUpController.Request, Si
 
   async handle (httpRequest: Controller.Request<SignUpController.Request>): Promise<Controller.Response<SignUpController.Response>> {
     try {
-      const requiredField = ['name', 'email', 'password', 'passwordConfirmation']
+      const requiredField = ['name', 'email', 'password', 'passwordConfirmation', 'company_name']
       for (const field of requiredField) {
         if (!httpRequest.body[field]) {
           return badRequest(new MissingParamError(field))
@@ -47,6 +47,9 @@ export namespace SignUpController {
     email: string
     password: string
     passwordConfirmation: string
+    company_name: string
+    cnpj?: string
+    cel_phone?: string
   }
 
   export type Response = Authentication.result | Error

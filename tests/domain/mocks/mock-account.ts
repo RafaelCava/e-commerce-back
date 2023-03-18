@@ -14,7 +14,8 @@ export const mockSignUpControllerRequest = (): SignUpController.Request => ({
   email: 'any_mail@mail.com',
   name: 'any_name',
   password: 'any_password',
-  passwordConfirmation: 'any_password'
+  passwordConfirmation: 'any_password',
+  company_name: 'any_name'
 })
 
 export const mockAddAccountParams = (): AddAccount.Params => ({
