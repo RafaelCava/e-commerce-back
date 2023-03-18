@@ -1,6 +1,6 @@
+import { type SignUpController } from './../../../src/presentation/controllers/login/signup/signup'
 import { type Authentication } from '../../../src/domain/usecases/account/authentication'
 import { type AddAccount } from '../../../src/domain/usecases/account/add-account'
-import { type AddAccountRequest } from '../../presentation/dto/add-account-request-dto'
 import { type AccountModel } from '../../../src/domain/models/account'
 
 export const mockAccount = (): AccountModel => ({
@@ -10,7 +10,7 @@ export const mockAccount = (): AccountModel => ({
   password: 'any_password'
 })
 
-export const mockAddAccountRequest = (): AddAccountRequest => ({
+export const mockSignUpControllerRequest = (): SignUpController.Request => ({
   email: 'any_mail@mail.com',
   name: 'any_name',
   password: 'any_password',

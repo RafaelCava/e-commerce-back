@@ -3,7 +3,6 @@ import {
   type HttpRequest,
   type HttpResponse,
   type EmailValidator,
-  type AddAccountRequest,
   type AddAccount,
   type Authentication
 } from './signup-protocols'
@@ -16,7 +15,7 @@ export class SignUpController implements Controller {
     private readonly authentication: Authentication
   ) {}
 
-  async handle (httpRequest: HttpRequest<AddAccountRequest>): Promise<HttpResponse<Error> | null> {
+  async handle (httpRequest: HttpRequest<SignUpController.Request>): Promise<HttpResponse<SignUpController.Response>> {
     try {
       const requiredField = ['name', 'email', 'password', 'passwordConfirmation']
       for (const field of requiredField) {
@@ -42,4 +41,15 @@ export class SignUpController implements Controller {
       return serverError(new ServerError(error))
     }
   }
+}
+
+export namespace SignUpController {
+  export type Request = {
+    name: string
+    email: string
+    password: string
+    passwordConfirmation: string
+  }
+
+  export type Response = Authentication.result | Error
 }
