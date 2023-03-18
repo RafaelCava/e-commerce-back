@@ -10,10 +10,12 @@ export const serverError = (error: Error): HttpResponse<Error> => ({
   body: error
 })
 
-export const ok = (body: any): HttpResponse<any> => ({
-  statusCode: 200,
-  body
-})
+export function ok<T> (body: T): HttpResponse<T> {
+  return {
+    body,
+    statusCode: 200
+  }
+}
 
 export const forbidden = (error: Error): HttpResponse<Error> => ({
   statusCode: 403,
