@@ -8,7 +8,7 @@ import {
   type Authentication
 } from './signup-protocols'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../errors'
-import { badRequest, forbidden, serverError } from '../../../helpers/http-helper'
+import { badRequest, forbidden, serverError, ok } from '../../../helpers/http-helper'
 export class SignUpController implements Controller {
   constructor (
     private readonly emailValidator: EmailValidator,
@@ -33,11 +33,11 @@ export class SignUpController implements Controller {
       }
       const account = await this.addAccount.add({ email, password, name })
       if (!account) return forbidden(new EmailInUseError())
-      await this.authentication.auth({
+      const authenticationResult = await this.authentication.auth({
         email,
         password
       })
-      return null
+      return ok(authenticationResult)
     } catch (error) {
       return serverError(new ServerError(error))
     }

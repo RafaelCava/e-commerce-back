@@ -1,10 +1,10 @@
 import { type Authentication } from '../../../../../src/domain/usecases/account/authentication'
 import { type AddAccount } from '../../../../../src/domain/usecases/account/add-account'
-import { mockAddAccountParams, mockAddAccountRequest, throwError } from '../../../../domain/mocks'
+import { mockAddAccountParams, mockAddAccountRequest, throwError, mockAuthenticationResult } from '../../../../domain/mocks'
 import { type EmailValidator } from '../../../../../src/presentation/protocols/email-validator'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../../../src/presentation/errors'
-import { badRequest, serverError, forbidden } from '../../../../../src/presentation/helpers/http-helper'
+import { badRequest, serverError, forbidden, ok } from '../../../../../src/presentation/helpers/http-helper'
 import { EmailValidatorSpy, AddAccountSpy, AuthenticationSpy } from '../../../mocks'
 
 type SutTypes = {
@@ -188,5 +188,14 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  it('Should return 200 if account are created', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: mockAddAccountRequest()
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok(mockAuthenticationResult()))
   })
 })
