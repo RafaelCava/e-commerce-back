@@ -32,7 +32,8 @@ export class SignUpController implements Controller<SignUpController.Request, Si
       }
       const employee = await this.addEmployee.add({ email, password, name })
       if (!employee) return forbidden(new EmailInUseError())
-      await this.addCompany.add({ name: companyName, email })
+      const company = await this.addCompany.add({ name: companyName, email })
+      if (!company) return forbidden(new EmailInUseError())
       const authenticationResult = await this.authentication.auth({
         email,
         password

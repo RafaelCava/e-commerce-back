@@ -212,6 +212,16 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 
+  it('Should return 403 if AddCompany return null', async () => {
+    const { sut, addCompanySpy } = makeSut()
+    jest.spyOn(addCompanySpy, 'add').mockReturnValueOnce(Promise.resolve(null))
+    const httpRequest = {
+      body: mockSignUpControllerRequest()
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
+  })
+
   it('Should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut()
     const authSpy = jest.spyOn(authenticationSpy, 'auth')
