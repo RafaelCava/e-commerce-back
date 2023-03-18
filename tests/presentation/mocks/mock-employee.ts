@@ -5,7 +5,7 @@ import { type EmployeeModel } from '../../domain/models/employee'
 
 export const AddEmployeeSpy = (): AddEmployee => {
   class AddEmployeeSpy implements AddEmployee {
-    async add (account: AddEmployee.Params): Promise<EmployeeModel> {
+    async add (employee: AddEmployee.Params): Promise<EmployeeModel> {
       return await Promise.resolve(mockEmployee())
     }
   }

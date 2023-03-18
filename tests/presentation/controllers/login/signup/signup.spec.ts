@@ -1,28 +1,32 @@
+import { type AddCompany } from '../../../../../src/domain/usecases/company/add-company'
 import { type Authentication } from '../../../../domain/usecases/employee/authentication'
 import { type AddEmployee } from '../../../../domain/usecases/employee/add-employee'
-import { mockAddEmployeeParams, mockSignUpControllerRequest, throwError, mockAuthenticationResult } from '../../../../domain/mocks'
+import { mockAddEmployeeParams, mockSignUpControllerRequest, throwError, mockAuthenticationResult, mockAddCompanyParams } from '../../../../domain/mocks'
 import { type EmailValidator } from '../../../../../src/presentation/protocols/email-validator'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../../../src/presentation/errors'
 import { badRequest, serverError, forbidden, ok } from '../../../../../src/presentation/helpers/http-helper'
-import { EmailValidatorSpy, AddEmployeeSpy, AuthenticationSpy } from '../../../mocks'
+import { EmailValidatorSpy, AddEmployeeSpy, AuthenticationSpy, AddCompanySpy } from '../../../mocks'
 
 type SutTypes = {
   sut: SignUpController
   emailValidatorSpy: EmailValidator
   addEmployeeSpy: AddEmployee
   authenticationSpy: Authentication
+  addCompanySpy: AddCompany
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorSpy = EmailValidatorSpy()
   const addEmployeeSpy = AddEmployeeSpy()
+  const addCompanySpy = AddCompanySpy()
   const authenticationSpy = AuthenticationSpy()
-  const sut = new SignUpController(emailValidatorSpy, addEmployeeSpy, authenticationSpy)
+  const sut = new SignUpController(emailValidatorSpy, addEmployeeSpy, addCompanySpy, authenticationSpy)
   return {
     sut,
     emailValidatorSpy,
     addEmployeeSpy,
+    addCompanySpy,
     authenticationSpy
   }
 }
@@ -35,7 +39,7 @@ describe('SignUp Controller', () => {
         email: 'any_email@gmail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -49,7 +53,7 @@ describe('SignUp Controller', () => {
         name: 'any_name',
         password: 'any_password',
         passwordConfirmation: 'any_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -63,7 +67,7 @@ describe('SignUp Controller', () => {
         name: 'any_name',
         email: 'any_email@gmail.com',
         passwordConfirmation: 'any_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -77,14 +81,14 @@ describe('SignUp Controller', () => {
         name: 'any_name',
         email: 'any_email@gmail.com',
         password: 'any_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new MissingParamError('passwordConfirmation')))
   })
 
-  it('Should return 400 if no company_name is provided', async () => {
+  it('Should return 400 if no companyName is provided', async () => {
     const { sut } = makeSut()
     const httpRequest: unknown = {
       body: {
@@ -95,7 +99,7 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('company_name')))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('companyName')))
   })
 
   it('Should return 400 if password confirmations fails', async () => {
@@ -106,7 +110,7 @@ describe('SignUp Controller', () => {
         email: 'any_email@gmail.com',
         password: 'any_password',
         passwordConfirmation: 'invalid_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -122,7 +126,7 @@ describe('SignUp Controller', () => {
         email: 'invalid_email@gmail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -149,7 +153,7 @@ describe('SignUp Controller', () => {
         email: 'invalid_email@gmail.com',
         password: 'any_password',
         passwordConfirmation: 'any_password',
-        company_name: 'any_name'
+        companyName: 'any_name'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -185,6 +189,17 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
+  })
+
+  it('Should call AddCompany with correct values', async () => {
+    const { sut, addCompanySpy } = makeSut()
+    const addSpy = jest.spyOn(addCompanySpy, 'add')
+    const httpRequest = {
+      body: mockSignUpControllerRequest()
+    }
+    await sut.handle(httpRequest)
+    expect(addSpy).toHaveBeenCalledWith(mockAddCompanyParams())
+    expect(addSpy).toBeCalledTimes(1)
   })
 
   it('Should call Authentication with correct values', async () => {

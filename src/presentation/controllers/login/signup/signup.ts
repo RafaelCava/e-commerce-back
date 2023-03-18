@@ -2,34 +2,37 @@ import {
   type Controller,
   type EmailValidator,
   type AddEmployee,
-  type Authentication
+  type Authentication,
+  type AddCompany
 } from './signup-protocols'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../errors'
 import { badRequest, forbidden, serverError, ok } from '../../../helpers/http-helper'
 export class SignUpController implements Controller<SignUpController.Request, SignUpController.Response> {
   constructor (
     private readonly emailValidator: EmailValidator,
-    private readonly addAccount: AddEmployee,
+    private readonly addEmployee: AddEmployee,
+    private readonly addCompany: AddCompany,
     private readonly authentication: Authentication
   ) {}
 
   async handle (httpRequest: Controller.Request<SignUpController.Request>): Promise<Controller.Response<SignUpController.Response>> {
     try {
-      const requiredField = ['name', 'email', 'password', 'passwordConfirmation', 'company_name']
+      const requiredField = ['name', 'email', 'password', 'passwordConfirmation', 'companyName']
       for (const field of requiredField) {
         if (!httpRequest.body[field]) {
           return badRequest(new MissingParamError(field))
         }
       }
-      const { email, password, passwordConfirmation, name } = httpRequest.body
+      const { email, password, passwordConfirmation, name, companyName } = httpRequest.body
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
       if (!this.emailValidator.isValid(email)) {
         return badRequest(new InvalidParamError('email'))
       }
-      const account = await this.addAccount.add({ email, password, name })
-      if (!account) return forbidden(new EmailInUseError())
+      const employee = await this.addEmployee.add({ email, password, name })
+      if (!employee) return forbidden(new EmailInUseError())
+      await this.addCompany.add({ name: companyName, email })
       const authenticationResult = await this.authentication.auth({
         email,
         password
@@ -47,7 +50,7 @@ export namespace SignUpController {
     email: string
     password: string
     passwordConfirmation: string
-    company_name: string
+    companyName: string
     cnpj?: string
     cel_phone?: string
   }
