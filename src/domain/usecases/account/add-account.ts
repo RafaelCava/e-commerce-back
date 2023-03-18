@@ -1,7 +1,7 @@
 import { type AccountModel } from 'domain/models/account'
 
 export interface AddAccount {
-  add: (account: AddAccount.Params) => Promise<AddAccount.Result>
+  add: (account: AddAccount.Params) => Promise<AccountModel>
 }
 
 export namespace AddAccount {
@@ -10,6 +10,4 @@ export namespace AddAccount {
     email: string
     password: string
   }
-
-  export type Result = AccountModel
 }
