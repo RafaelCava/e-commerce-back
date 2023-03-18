@@ -202,6 +202,16 @@ describe('SignUp Controller', () => {
     expect(addSpy).toBeCalledTimes(1)
   })
 
+  it('Should return 500 if AddCompany throw', async () => {
+    const { sut, addCompanySpy } = makeSut()
+    jest.spyOn(addCompanySpy, 'add').mockImplementationOnce(throwError)
+    const httpRequest = {
+      body: mockSignUpControllerRequest()
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
   it('Should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut()
     const authSpy = jest.spyOn(authenticationSpy, 'auth')
