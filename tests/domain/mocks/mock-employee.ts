@@ -1,9 +1,9 @@
-import { type SignUpController } from './../../../src/presentation/controllers/login/signup/signup'
-import { type Authentication } from '../../../src/domain/usecases/account/authentication'
-import { type AddAccount } from '../../../src/domain/usecases/account/add-account'
-import { type AccountModel } from '../../../src/domain/models/account'
+import { type SignUpController } from '../../presentation/controllers/login/signup/signup'
+import { type Authentication } from '../usecases/employee/authentication'
+import { type AddEmployee } from '../usecases/employee/add-employee'
+import { type EmployeeModel } from '../models/employee'
 
-export const mockAccount = (): AccountModel => ({
+export const mockEmployee = (): EmployeeModel => ({
   email: 'any_mail@mail.com',
   id: 'any_id',
   name: 'any_name',
@@ -18,7 +18,7 @@ export const mockSignUpControllerRequest = (): SignUpController.Request => ({
   company_name: 'any_name'
 })
 
-export const mockAddAccountParams = (): AddAccount.Params => ({
+export const mockAddEmployeeParams = (): AddEmployee.Params => ({
   email: 'any_mail@mail.com',
   name: 'any_name',
   password: 'any_password'

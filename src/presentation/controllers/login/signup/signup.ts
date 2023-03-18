@@ -1,7 +1,7 @@
 import {
   type Controller,
   type EmailValidator,
-  type AddAccount,
+  type AddEmployee,
   type Authentication
 } from './signup-protocols'
 import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../errors'
@@ -9,7 +9,7 @@ import { badRequest, forbidden, serverError, ok } from '../../../helpers/http-he
 export class SignUpController implements Controller<SignUpController.Request, SignUpController.Response> {
   constructor (
     private readonly emailValidator: EmailValidator,
-    private readonly addAccount: AddAccount,
+    private readonly addAccount: AddEmployee,
     private readonly authentication: Authentication
   ) {}
 
