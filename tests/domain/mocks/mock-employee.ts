@@ -1,4 +1,3 @@
-import { type SignUpController } from '../../presentation/controllers/login/signup/signup'
 import { type Authentication } from '../usecases/employee/authentication'
 import { type AddEmployee } from '../usecases/employee/add-employee'
 import { type EmployeeModel } from '../models/employee'
@@ -8,16 +7,6 @@ export const mockEmployee = (): EmployeeModel => ({
   id: 'any_id',
   name: 'any_name',
   password: 'any_password'
-})
-
-export const mockSignUpControllerRequest = (): SignUpController.Request => ({
-  email: 'any_mail@mail.com',
-  name: 'any_name',
-  password: 'any_password',
-  passwordConfirmation: 'any_password',
-  companyName: 'any_name',
-  cnpj: 'any_value',
-  cel_phone: 'any_cel_phone'
 })
 
 export const mockAddEmployeeParams = (): AddEmployee.Params => ({
