@@ -1,3 +1,4 @@
+import { MissingParamError } from '../../../../../src/presentation/errors/missing-param-error'
 import { type AddCompany } from '../../../../../src/domain/usecases/company/add-company'
 import { type Authentication } from '../../../../domain/usecases/employee/authentication'
 import { type AddEmployee } from '../../../../domain/usecases/employee/add-employee'
@@ -5,7 +6,7 @@ import { mockAddEmployeeParams, throwError, mockAuthenticationResult, mockAddCom
 import { type Validation } from '../../../../../src/presentation/protocols/validation'
 import { SignUpController } from '../../../../../src/presentation/controllers/login/signup/signup'
 import { ServerError, EmailInUseError } from '../../../../../src/presentation/errors'
-import { serverError, forbidden, ok } from '../../../../../src/presentation/helpers/http-helper'
+import { serverError, forbidden, ok, badRequest } from '../../../../../src/presentation/helpers/http-helper'
 import { AddEmployeeSpy, AuthenticationSpy, AddCompanySpy, mockSignUpControllerRequest, ValidationSpy } from '../../../mocks'
 
 type SutTypes = {
@@ -37,16 +38,20 @@ describe('SignUp Controller', () => {
       const { sut, validationSpy } = makeSut()
       const validateSpy = jest.spyOn(validationSpy, 'validate')
       const httpRequest = {
-        body: {
-          name: 'any_name',
-          email: 'invalid_email@gmail.com',
-          password: 'any_password',
-          passwordConfirmation: 'any_password',
-          companyName: 'any_name'
-        }
+        body: mockSignUpControllerRequest()
       }
       await sut.handle(httpRequest)
       expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    })
+
+    it('Should return 400 if Validation throws an error', async () => {
+      const { sut, validationSpy } = makeSut()
+      jest.spyOn(validationSpy, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
+      const httpRequest = {
+        body: mockSignUpControllerRequest()
+      }
+      const httpResponse = await sut.handle(httpRequest)
+      expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
     })
   })
 
