@@ -4,4 +4,5 @@ export interface CompanyModel {
   cnpj?: string
   logo?: string
   cel_phone?: string
+  createdAt?: Date
 }
