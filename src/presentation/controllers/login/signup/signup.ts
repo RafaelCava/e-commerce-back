@@ -22,10 +22,10 @@ export class SignUpController implements Controller<SignUpController.Request, Si
         return badRequest(error)
       }
       const { companyName, email, name, password, cel_phone, cnpj } = httpRequest.body
-      const employee = await this.addEmployee.add({ email, password, name })
-      if (!employee) return forbidden(new EmailInUseError())
       const company = await this.addCompany.add({ name: companyName, email, cnpj, cel_phone })
       if (!company) return forbidden(new EmailInUseError())
+      const employee = await this.addEmployee.add({ email, password, name, company: company.id })
+      if (!employee) return forbidden(new EmailInUseError())
       const authenticationResult = await this.authentication.auth({
         email,
         password

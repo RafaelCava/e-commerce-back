@@ -4,4 +4,5 @@ export interface EmployeeModel {
   email: string
   password: string
   avatar?: string
+  company: string
 }

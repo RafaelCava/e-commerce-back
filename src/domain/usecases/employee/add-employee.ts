@@ -9,6 +9,7 @@ export namespace AddEmployee {
     name: string
     email: string
     password: string
+    company: string
   }
 
   export type Result = EmployeeModel
