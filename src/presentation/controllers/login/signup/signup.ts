@@ -1,15 +1,15 @@
 import {
   type Controller,
-  type EmailValidator,
   type AddEmployee,
   type Authentication,
-  type AddCompany
+  type AddCompany,
+  type Validation
 } from './signup-protocols'
-import { MissingParamError, InvalidParamError, ServerError, EmailInUseError } from '../../../errors'
+import { ServerError, EmailInUseError } from '../../../errors'
 import { badRequest, forbidden, serverError, ok } from '../../../helpers/http-helper'
 export class SignUpController implements Controller<SignUpController.Request, SignUpController.Response> {
   constructor (
-    private readonly emailValidator: EmailValidator,
+    private readonly validation: Validation,
     private readonly addEmployee: AddEmployee,
     private readonly addCompany: AddCompany,
     private readonly authentication: Authentication
@@ -17,19 +17,11 @@ export class SignUpController implements Controller<SignUpController.Request, Si
 
   async handle (httpRequest: Controller.Request<SignUpController.Request>): Promise<Controller.Response<SignUpController.Response>> {
     try {
-      const requiredField = ['name', 'email', 'password', 'passwordConfirmation', 'companyName']
-      for (const field of requiredField) {
-        if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError(field))
-        }
+      const error = this.validation.validate(httpRequest.body)
+      if (error) {
+        return badRequest(error)
       }
-      const { email, password, passwordConfirmation, name, companyName, cnpj, cel_phone } = httpRequest.body
-      if (password !== passwordConfirmation) {
-        return badRequest(new InvalidParamError('passwordConfirmation'))
-      }
-      if (!this.emailValidator.isValid(email)) {
-        return badRequest(new InvalidParamError('email'))
-      }
+      const { companyName, email, name, password, cel_phone, cnpj } = httpRequest.body
       const employee = await this.addEmployee.add({ email, password, name })
       if (!employee) return forbidden(new EmailInUseError())
       const company = await this.addCompany.add({ name: companyName, email, cnpj, cel_phone })
