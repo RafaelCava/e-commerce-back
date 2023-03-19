@@ -1,7 +1,7 @@
 import { type EmployeeModel } from 'domain/models/employee'
 
 export interface AddEmployee {
-  add: (account: AddEmployee.Params) => Promise<EmployeeModel>
+  add: (account: AddEmployee.Params) => Promise<AddEmployee.Result>
 }
 
 export namespace AddEmployee {
@@ -10,4 +10,6 @@ export namespace AddEmployee {
     email: string
     password: string
   }
+
+  export type Result = EmployeeModel
 }

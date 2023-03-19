@@ -1,11 +1,10 @@
 import { type AddEmployee } from '../../domain/usecases/employee/add-employee'
 import { type Authentication } from '../../domain/usecases/employee/authentication'
 import { mockEmployee, mockAuthenticationResult } from '../../domain/mocks/mock-employee'
-import { type EmployeeModel } from '../../domain/models/employee'
 
 export const AddEmployeeSpy = (): AddEmployee => {
   class AddEmployeeSpy implements AddEmployee {
-    async add (employee: AddEmployee.Params): Promise<EmployeeModel> {
+    async add (employee: AddEmployee.Params): Promise<AddEmployee.Result> {
       return await Promise.resolve(mockEmployee())
     }
   }
