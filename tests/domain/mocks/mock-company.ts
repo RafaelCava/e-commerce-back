@@ -7,5 +7,7 @@ export const mockCompany = (): CompanyModel => ({
 
 export const mockAddCompanyParams = (): AddCompany.Params => ({
   email: 'any_mail@mail.com',
-  name: 'any_name'
+  name: 'any_name',
+  cel_phone: 'any_cel_phone',
+  cnpj: 'any_value'
 })

@@ -1,7 +1,7 @@
 import { type CompanyModel } from '../../models/company'
 
 export interface AddCompany {
-  add: (company: AddCompany.Params) => Promise<CompanyModel>
+  add: (company: AddCompany.Params) => Promise<AddCompany.Result>
 }
 
 export namespace AddCompany {
@@ -11,4 +11,6 @@ export namespace AddCompany {
     cnpj?: string
     cel_phone?: string
   }
+
+  export type Result = CompanyModel
 }

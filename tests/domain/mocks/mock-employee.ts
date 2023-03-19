@@ -15,7 +15,9 @@ export const mockSignUpControllerRequest = (): SignUpController.Request => ({
   name: 'any_name',
   password: 'any_password',
   passwordConfirmation: 'any_password',
-  companyName: 'any_name'
+  companyName: 'any_name',
+  cnpj: 'any_value',
+  cel_phone: 'any_cel_phone'
 })
 
 export const mockAddEmployeeParams = (): AddEmployee.Params => ({

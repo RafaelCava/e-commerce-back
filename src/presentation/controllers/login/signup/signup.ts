@@ -23,7 +23,7 @@ export class SignUpController implements Controller<SignUpController.Request, Si
           return badRequest(new MissingParamError(field))
         }
       }
-      const { email, password, passwordConfirmation, name, companyName } = httpRequest.body
+      const { email, password, passwordConfirmation, name, companyName, cnpj, cel_phone } = httpRequest.body
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
@@ -32,7 +32,7 @@ export class SignUpController implements Controller<SignUpController.Request, Si
       }
       const employee = await this.addEmployee.add({ email, password, name })
       if (!employee) return forbidden(new EmailInUseError())
-      const company = await this.addCompany.add({ name: companyName, email })
+      const company = await this.addCompany.add({ name: companyName, email, cnpj, cel_phone })
       if (!company) return forbidden(new EmailInUseError())
       const authenticationResult = await this.authentication.auth({
         email,
