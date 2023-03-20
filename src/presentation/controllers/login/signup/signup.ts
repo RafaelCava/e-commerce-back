@@ -21,8 +21,8 @@ export class SignUpController implements Controller<SignUpController.Request, Si
       if (error) {
         return badRequest(error)
       }
-      const { companyName, email, name, password, cel_phone, cnpj } = httpRequest.body
-      const company = await this.addCompany.add({ name: companyName, email, cnpj, cel_phone })
+      const { companyName, email, name, password, celPhone, cnpj } = httpRequest.body
+      const company = await this.addCompany.add({ name: companyName, email, cnpj, celPhone })
       if (!company) return forbidden(new EmailInUseError())
       const employee = await this.addEmployee.add({ email, password, name, company: company.id })
       if (!employee) return forbidden(new EmailInUseError())
@@ -45,7 +45,7 @@ export namespace SignUpController {
     passwordConfirmation: string
     companyName: string
     cnpj?: string
-    cel_phone?: string
+    celPhone?: string
   }
 
   export type Response = Authentication.result | Error

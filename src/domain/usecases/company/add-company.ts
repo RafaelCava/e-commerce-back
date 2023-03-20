@@ -9,7 +9,7 @@ export namespace AddCompany {
     email: string
     name: string
     cnpj?: string
-    cel_phone?: string
+    celPhone?: string
   }
 
   export type Result = CompanyModel

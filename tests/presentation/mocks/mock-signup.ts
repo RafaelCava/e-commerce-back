@@ -6,5 +6,5 @@ export const mockSignUpControllerRequest = (): SignUpController.Request => ({
   passwordConfirmation: 'any_password',
   companyName: 'any_name',
   cnpj: 'any_value',
-  cel_phone: 'any_cel_phone'
+  celPhone: 'any_celPhone'
 })
