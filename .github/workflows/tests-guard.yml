@@ -1,11 +1,13 @@
 name: tests-guard
 
 on:
+  push:
+    branches: ['feat/signup']
   pull_request:
     branches: [ "develop", "homolog", "master" ]
 
 jobs:
-  install-and-test:
+  tests-guard:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.1.0
@@ -15,4 +17,9 @@ jobs:
           node-version: '16.x'
           cache: 'yarn'
       - run: yarn install
-      - run: yarn test
+      - run: yarn test:cov
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
