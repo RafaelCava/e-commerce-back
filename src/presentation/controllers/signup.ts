@@ -1,13 +1,10 @@
-import {
-  type Controller,
-  type AddEmployee,
-  type Authentication,
-  type AddCompany,
-  type Validation
-} from './signup-protocols'
-import { ServerError, EmailInUseError } from '../../../errors'
-import { badRequest, forbidden, serverError, ok } from '../../../helpers/http-helper'
-export class SignUpController implements Controller<SignUpController.Request, SignUpController.Response> {
+import { type HttpResponse } from '../protocols/http'
+import { ServerError, EmailInUseError } from '../errors'
+import { badRequest, forbidden, serverError, ok } from '../helpers/http-helper'
+import { type AddEmployee, type AddCompany, type Authentication } from '../../domain/usecases'
+import { type Validation, type Controller } from '../protocols'
+
+export class SignUpController implements Controller<SignUpController.Params> {
   constructor (
     private readonly validation: Validation,
     private readonly addEmployee: AddEmployee,
@@ -15,13 +12,13 @@ export class SignUpController implements Controller<SignUpController.Request, Si
     private readonly authentication: Authentication
   ) {}
 
-  async handle (httpRequest: Controller.Request<SignUpController.Request>): Promise<Controller.Response<SignUpController.Response>> {
+  async handle (request: SignUpController.Params): Promise<HttpResponse> {
     try {
-      const error = this.validation.validate(httpRequest.body)
+      const error = this.validation.validate(request)
       if (error) {
         return badRequest(error)
       }
-      const { companyName, email, name, password, celPhone, cnpj } = httpRequest.body
+      const { companyName, email, name, password, celPhone, cnpj } = request
       const company = await this.addCompany.add({ name: companyName, email, cnpj, celPhone })
       if (!company) return forbidden(new EmailInUseError())
       const employee = await this.addEmployee.add({ email, password, name, company: company.id })
@@ -38,7 +35,7 @@ export class SignUpController implements Controller<SignUpController.Request, Si
 }
 
 export namespace SignUpController {
-  export type Request = {
+  export type Params = {
     name: string
     email: string
     password: string
@@ -47,6 +44,4 @@ export namespace SignUpController {
     cnpj?: string
     celPhone?: string
   }
-
-  export type Response = Authentication.result | Error
 }

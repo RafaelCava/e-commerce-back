@@ -1,5 +1,3 @@
-import { type EmployeeModel } from 'domain/models/employee'
-
 export interface AddEmployee {
   add: (account: AddEmployee.Params) => Promise<AddEmployee.Result>
 }
@@ -12,5 +10,5 @@ export namespace AddEmployee {
     company: string
   }
 
-  export type Result = EmployeeModel
+  export type Result = boolean
 }

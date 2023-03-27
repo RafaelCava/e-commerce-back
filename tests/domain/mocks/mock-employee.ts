@@ -1,14 +1,4 @@
-import { type Authentication } from '../usecases/employee/authentication'
-import { type AddEmployee } from '../usecases/employee/add-employee'
-import { type EmployeeModel } from '../models/employee'
-
-export const mockEmployee = (): EmployeeModel => ({
-  email: 'any_mail@mail.com',
-  id: 'any_id',
-  name: 'any_name',
-  password: 'any_password',
-  company: 'any_id'
-})
+import { type AddEmployee, type Authentication } from '../usecases'
 
 export const mockAddEmployeeParams = (): AddEmployee.Params => ({
   email: 'any_mail@mail.com',
