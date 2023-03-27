@@ -1,8 +1,6 @@
 name: tests-guard
 
 on:
-  push:
-    branches: ['feat/signup']
   pull_request:
     branches: [ "develop", "homolog", "master" ]
 

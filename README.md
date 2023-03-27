@@ -7,21 +7,23 @@
 
 <h1 align="center">e-Commerce Back</h1>
 
-<!-- <p align="center">
+<p align="center">
   <img alt="Principal linguagem do projeto" src="https://img.shields.io/github/languages/top/RafaelCava/e-commerce-back?color=56BEB8">
 
   <img alt="Quantidade de linguagens utilizadas" src="https://img.shields.io/github/languages/count/RafaelCava/e-commerce-back?color=56BEB8">
 
   <img alt="Tamanho do repositório" src="https://img.shields.io/github/repo-size/RafaelCava/e-commerce-back?color=56BEB8">
 
-  <img alt="Licença" src="https://img.shields.io/github/license/RafaelCava/e-commerce-back?color=56BEB8">
+  <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=RafaelCava_e-commerce-back&metric=alert_status">
+
+  <!-- <img alt="Licença" src="https://img.shields.io/github/license/RafaelCava/e-commerce-back?color=56BEB8">
 
   <img alt="Github issues" src="https://img.shields.io/github/issues/RafaelCava/e-commerce-back?color=56BEB8" />
 
   <img alt="Github forks" src="https://img.shields.io/github/forks/RafaelCava/e-commerce-back?color=56BEB8" />
 
-  <img alt="Github stars" src="https://img.shields.io/github/stars/RafaelCava/e-commerce-back?color=56BEB8" />
-</p> -->
+  <img alt="Github stars" src="https://img.shields.io/github/stars/RafaelCava/e-commerce-back?color=56BEB8" /> -->
+</p>
 
 <h4 align="center"> 
 	🚧  e-Commerce Back 🚀 Em construção...  🚧
@@ -35,7 +37,6 @@
   <a href="#rocket-tecnologias">Tecnologias</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-pré-requisitos">Pré requisitos</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-começando">Começando</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-preparando-ambiente-de-dev">Preparando ambiente de Dev</a> &#xa0; | &#xa0;
   <a href="#memo-licença">Licença</a> &#xa0; | &#xa0;
   <a href="https://github.com/RafaelCava" target="_blank">Autor</a>
 </p>
@@ -89,14 +90,6 @@ $ cp .env.example .env
 $ docker compose up -d
 
 # O app vai inicializar em <http://localhost:3033> ou <http://localhost:[PORTA CONFIGURADA NO COMPOSE]>
-```
-
-## :checkered_flag: Preparando ambiente de Dev ##
-
-
-```bash
-$ docker exec -it e-commerce-back bash yarn husky install
-
 ```
 
 ## :memo: Licença ##
