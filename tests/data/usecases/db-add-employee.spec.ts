@@ -1,5 +1,5 @@
 import { type CheckAccountByEmailRepository } from '../../../src/data/protocols'
-import { mockAddEmployeeParams } from '../../domain/mocks'
+import { mockAddEmployeeParams, throwError } from '../../domain/mocks'
 import { DbAddEmployee } from '../../../src/data/usecases'
 import { CheckAccountByEmailRepositorySpy } from '../mocks'
 
@@ -25,6 +25,13 @@ describe('DbAddAccount UseCase', () => {
       await sut.add(mockAddEmployeeParams())
       expect(checkByEmailSpy).toHaveBeenCalledTimes(1)
       expect(checkByEmailSpy).toHaveBeenCalledWith(mockAddEmployeeParams().email)
+    })
+
+    it('Should throw if CheckAccountByEmailRepository throws', async () => {
+      const { sut, checkAccountByEmailRepositorySpy } = makeSut()
+      jest.spyOn(checkAccountByEmailRepositorySpy, 'checkByEmail').mockImplementationOnce(throwError)
+      const result = sut.add(mockAddEmployeeParams())
+      await expect(result).rejects.toThrow()
     })
   })
 })
