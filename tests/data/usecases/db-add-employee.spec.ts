@@ -82,5 +82,11 @@ describe('DbAddAccount UseCase', () => {
       const result = sut.add(mockAddEmployeeParams())
       await expect(result).rejects.toThrow()
     })
+
+    it('Should return true if employee are created', async () => {
+      const { sut } = makeSut()
+      const result = await sut.add(mockAddEmployeeParams())
+      expect(result).toBe(true)
+    })
   })
 })

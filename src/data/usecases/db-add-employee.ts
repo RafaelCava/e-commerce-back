@@ -13,7 +13,6 @@ export class DbAddEmployee implements AddEmployee {
     if (exists) return false
     const hashedValue = await this.hasher.hash(employee.password)
     employee.password = hashedValue
-    await this.addEmployeeRepository.add(employee)
-    return null
+    return await this.addEmployeeRepository.add(employee)
   }
 }
