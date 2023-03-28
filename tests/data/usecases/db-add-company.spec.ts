@@ -59,5 +59,12 @@ describe('DbAddCompany UseCase', () => {
       const promise = sut.add(mockAddCompanyParams())
       await expect(promise).rejects.toThrow()
     })
+
+    it('Should return object with valid id if company are created', async () => {
+      const { sut } = makeSut()
+      const company = await sut.add(mockAddCompanyParams())
+      expect(company).toBeTruthy()
+      expect(company.id).toBe('any_id')
+    })
   })
 })

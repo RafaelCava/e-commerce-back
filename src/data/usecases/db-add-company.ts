@@ -6,7 +6,6 @@ export class DbAddCompany implements AddCompany {
   async add (company: AddCompany.Params): Promise<AddCompany.Result> {
     const exists = await this.checkCompanyByEmailRepository.checkByEmail(company.email)
     if (exists) return null
-    await this.addCompanyRepository.add(company)
-    return null
+    return await this.addCompanyRepository.add(company)
   }
 }
