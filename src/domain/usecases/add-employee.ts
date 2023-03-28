@@ -1,5 +1,5 @@
 export interface AddEmployee {
-  add: (account: AddEmployee.Params) => Promise<AddEmployee.Result>
+  add: (employee: AddEmployee.Params) => Promise<AddEmployee.Result>
 }
 
 export namespace AddEmployee {
