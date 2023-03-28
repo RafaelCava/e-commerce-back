@@ -1,8 +1,7 @@
-import { type HttpResponse } from '../protocols/http'
 import { ServerError, EmailInUseError } from '../errors'
 import { badRequest, forbidden, serverError, ok } from '../helpers/http-helper'
 import { type AddEmployee, type AddCompany, type Authentication } from '../../domain/usecases'
-import { type Validation, type Controller } from '../protocols'
+import { type Validation, type Controller, type HttpResponse } from '../protocols'
 
 export class SignUpController implements Controller<SignUpController.Params> {
   constructor (
