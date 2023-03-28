@@ -22,5 +22,11 @@ describe('JwtAdapter', () => {
       expect(encryptSpy).toHaveBeenCalledTimes(1)
       expect(encryptSpy).toHaveBeenCalledWith('any_value', secretKey)
     })
+
+    it('should return encrypt value if encrypt succeeds', async () => {
+      const sut = makeSut(secretKey)
+      const encryptValue = await sut.encrypt('any_value')
+      expect(encryptValue).toBe('encrypted_value')
+    })
   })
 })
