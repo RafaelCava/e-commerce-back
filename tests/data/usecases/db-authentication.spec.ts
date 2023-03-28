@@ -106,5 +106,14 @@ describe('DbAuthentication', () => {
       const result = sut.auth(mockAuthenticationParams())
       await expect(result).rejects.toThrow()
     })
+
+    it('Should return Authentication.Result if employee are authenticate', async () => {
+      const { sut } = makeSut()
+      const authenticationResult = await sut.auth(mockAuthenticationParams())
+      expect(authenticationResult.accessToken).toBeTruthy()
+      expect(authenticationResult.name).toBeTruthy()
+      expect(authenticationResult.name).toBe('any_name')
+      expect(authenticationResult.accessToken).toBe('encrypt_value')
+    })
   })
 })

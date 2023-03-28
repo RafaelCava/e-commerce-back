@@ -4,7 +4,8 @@ export const LoadEmployeeByEmailRepositorySpy = (): LoadEmployeeByEmailRepositor
     async loadByEmail (email: string): Promise<LoadEmployeeByEmailRepository.Result> {
       return await Promise.resolve({
         id: 'any_id',
-        password: 'hashed_value'
+        password: 'hashed_value',
+        name: 'any_name'
       })
     }
   }

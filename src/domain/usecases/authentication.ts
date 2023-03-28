@@ -8,7 +8,7 @@ export namespace Authentication {
     password: string
   }
   export type result = {
-    access_token: string
+    accessToken: string
     name: string
   }
 }

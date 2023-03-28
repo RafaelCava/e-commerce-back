@@ -6,5 +6,6 @@ export namespace LoadEmployeeByEmailRepository {
   export type Result = {
     id: string
     password: string
+    name: string
   }
 }

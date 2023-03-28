@@ -8,6 +8,6 @@ export const mockAddEmployeeParams = (): AddEmployee.Params => ({
 })
 
 export const mockAuthenticationResult = (): Authentication.result => ({
-  access_token: 'any_token',
+  accessToken: 'any_token',
   name: 'any_name'
 })
