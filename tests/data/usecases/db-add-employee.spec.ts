@@ -1,35 +1,35 @@
-import { type CheckAccountByEmailRepository } from '../../../src/data/protocols'
+import { type CheckEmployeeByEmailRepository } from '../../../src/data/protocols'
 import { mockAddEmployeeParams, throwError } from '../../domain/mocks'
 import { DbAddEmployee } from '../../../src/data/usecases'
-import { CheckAccountByEmailRepositorySpy } from '../mocks'
+import { CheckEmployeeByEmailRepositorySpy } from '../mocks'
 
 type SutTypes = {
   sut: DbAddEmployee
-  checkAccountByEmailRepositorySpy: CheckAccountByEmailRepository
+  checkEmployeeByEmailRepositorySpy: CheckEmployeeByEmailRepository
 }
 
 const makeSut = (): SutTypes => {
-  const checkAccountByEmailRepositorySpy = CheckAccountByEmailRepositorySpy()
-  const sut = new DbAddEmployee(checkAccountByEmailRepositorySpy)
+  const checkEmployeeByEmailRepositorySpy = CheckEmployeeByEmailRepositorySpy()
+  const sut = new DbAddEmployee(checkEmployeeByEmailRepositorySpy)
   return {
     sut,
-    checkAccountByEmailRepositorySpy
+    checkEmployeeByEmailRepositorySpy
   }
 }
 
 describe('DbAddAccount UseCase', () => {
-  describe('CheckAccountByEmailRepository', () => {
-    it('Should call CheckAccountByEmailRepository with correct value', async () => {
-      const { sut, checkAccountByEmailRepositorySpy } = makeSut()
-      const checkByEmailSpy = jest.spyOn(checkAccountByEmailRepositorySpy, 'checkByEmail')
+  describe('CheckEmployeeByEmailRepository', () => {
+    it('Should call CheckEmployeeByEmailRepository with correct value', async () => {
+      const { sut, checkEmployeeByEmailRepositorySpy } = makeSut()
+      const checkByEmailSpy = jest.spyOn(checkEmployeeByEmailRepositorySpy, 'checkByEmail')
       await sut.add(mockAddEmployeeParams())
       expect(checkByEmailSpy).toHaveBeenCalledTimes(1)
       expect(checkByEmailSpy).toHaveBeenCalledWith(mockAddEmployeeParams().email)
     })
 
-    it('Should throw if CheckAccountByEmailRepository throws', async () => {
-      const { sut, checkAccountByEmailRepositorySpy } = makeSut()
-      jest.spyOn(checkAccountByEmailRepositorySpy, 'checkByEmail').mockImplementationOnce(throwError)
+    it('Should throw if CheckEmployeeByEmailRepository throws', async () => {
+      const { sut, checkEmployeeByEmailRepositorySpy } = makeSut()
+      jest.spyOn(checkEmployeeByEmailRepositorySpy, 'checkByEmail').mockImplementationOnce(throwError)
       const result = sut.add(mockAddEmployeeParams())
       await expect(result).rejects.toThrow()
     })

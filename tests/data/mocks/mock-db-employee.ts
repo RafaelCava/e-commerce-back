@@ -1,10 +1,10 @@
-import { type CheckAccountByEmailRepository } from '../../../src/data/protocols/db/check-account-by-email-repository'
+import { type CheckEmployeeByEmailRepository } from '../protocols/db/check-employee-by-email-repository'
 
-export const CheckAccountByEmailRepositorySpy = (): CheckAccountByEmailRepository => {
-  class CheckAccountByEmailRepositorySpy implements CheckAccountByEmailRepository {
+export const CheckEmployeeByEmailRepositorySpy = (): CheckEmployeeByEmailRepository => {
+  class CheckEmployeeByEmailRepositorySpy implements CheckEmployeeByEmailRepository {
     async checkByEmail (email: string): Promise<boolean> {
       return await Promise.resolve(true)
     }
   }
-  return new CheckAccountByEmailRepositorySpy()
+  return new CheckEmployeeByEmailRepositorySpy()
 }
