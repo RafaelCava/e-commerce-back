@@ -11,6 +11,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
+    "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.4.2",
     "@types/node": "^18.15.3",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
@@ -47,5 +48,8 @@
     "test:cov": "rimraf coverage && yarn test --coverage",
     "build:compile": "tsc -p tsconfig-build.json",
     "build": "rimraf dist && yarn build:compile"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0"
   }
 }
