@@ -99,5 +99,12 @@ describe('DbAuthentication', () => {
       expect(updateAccessTokenSpy).toHaveBeenCalledTimes(1)
       expect(updateAccessTokenSpy).toHaveBeenCalledWith('any_id', 'encrypt_value')
     })
+
+    it('Should throw if UpdateAccessTokenRepository throws', async () => {
+      const { sut, updateAccessTokenRepositorySpy } = makeSut()
+      jest.spyOn(updateAccessTokenRepositorySpy, 'updateAccessToken').mockImplementationOnce(throwError)
+      const result = sut.auth(mockAuthenticationParams())
+      await expect(result).rejects.toThrow()
+    })
   })
 })
