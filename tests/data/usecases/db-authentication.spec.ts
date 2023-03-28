@@ -52,5 +52,12 @@ describe('DbAuthentication', () => {
       expect(compareSpy).toHaveBeenCalledTimes(1)
       expect(compareSpy).toHaveBeenCalledWith(mockAuthenticationParams().password, 'hashed_value')
     })
+
+    it('Should throw if HashComparer throws', async () => {
+      const { sut, hashComparerSpy } = makeSut()
+      jest.spyOn(hashComparerSpy, 'compare').mockImplementationOnce(throwError)
+      const result = sut.auth(mockAuthenticationParams())
+      await expect(result).rejects.toThrow()
+    })
   })
 })
