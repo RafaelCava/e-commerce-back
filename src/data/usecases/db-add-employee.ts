@@ -1,12 +1,19 @@
-import { type CheckEmployeeByEmailRepository, type Hasher } from '../protocols'
+import { type CheckEmployeeByEmailRepository, type Hasher, type AddEmployeeRepository } from '../protocols'
 import { type AddEmployee } from '../../domain/usecases'
 
 export class DbAddEmployee implements AddEmployee {
-  constructor (private readonly checkAccountByEmailRepository: CheckEmployeeByEmailRepository, private readonly hasher: Hasher) {}
+  constructor (
+    private readonly checkAccountByEmailRepository: CheckEmployeeByEmailRepository,
+    private readonly hasher: Hasher,
+    private readonly addEmployeeRepository: AddEmployeeRepository
+  ) {}
+
   async add (employee: AddEmployee.Params): Promise<AddEmployee.Result> {
     const exists = await this.checkAccountByEmailRepository.checkByEmail(employee.email)
     if (exists) return false
-    await this.hasher.hash(employee.password)
+    const hashedValue = await this.hasher.hash(employee.password)
+    employee.password = hashedValue
+    await this.addEmployeeRepository.add(employee)
     return null
   }
 }

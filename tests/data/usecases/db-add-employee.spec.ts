@@ -1,22 +1,25 @@
-import { type CheckEmployeeByEmailRepository, type Hasher } from '../../../src/data/protocols'
+import { type CheckEmployeeByEmailRepository, type Hasher, type AddEmployeeRepository } from '../../../src/data/protocols'
 import { mockAddEmployeeParams, throwError } from '../../domain/mocks'
 import { DbAddEmployee } from '../../../src/data/usecases'
-import { CheckEmployeeByEmailRepositorySpy, HasherSpy } from '../mocks'
+import { CheckEmployeeByEmailRepositorySpy, HasherSpy, AddEmployeeRepositorySpy } from '../mocks'
 
 type SutTypes = {
   sut: DbAddEmployee
   checkEmployeeByEmailRepositorySpy: CheckEmployeeByEmailRepository
   hasherSpy: Hasher
+  addEmployeeRepositorySpy: AddEmployeeRepository
 }
 
 const makeSut = (): SutTypes => {
   const checkEmployeeByEmailRepositorySpy = CheckEmployeeByEmailRepositorySpy()
   const hasherSpy = HasherSpy()
-  const sut = new DbAddEmployee(checkEmployeeByEmailRepositorySpy, hasherSpy)
+  const addEmployeeRepositorySpy = AddEmployeeRepositorySpy()
+  const sut = new DbAddEmployee(checkEmployeeByEmailRepositorySpy, hasherSpy, addEmployeeRepositorySpy)
   return {
     sut,
     checkEmployeeByEmailRepositorySpy,
-    hasherSpy
+    hasherSpy,
+    addEmployeeRepositorySpy
   }
 }
 
@@ -59,6 +62,18 @@ describe('DbAddAccount UseCase', () => {
       jest.spyOn(hasherSpy, 'hash').mockImplementationOnce(throwError)
       const result = sut.add(mockAddEmployeeParams())
       await expect(result).rejects.toThrow()
+    })
+  })
+
+  describe('AddEmployeeRepository', () => {
+    it('Should call AddEmployeeRepository with correct values', async () => {
+      const { sut, addEmployeeRepositorySpy } = makeSut()
+      const addSpy = jest.spyOn(addEmployeeRepositorySpy, 'add')
+      const mockParams = mockAddEmployeeParams()
+      await sut.add(mockParams)
+      mockParams.password = 'hashed_value'
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(addSpy).toHaveBeenCalledWith(mockParams)
     })
   })
 })

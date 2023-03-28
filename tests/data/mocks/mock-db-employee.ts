@@ -1,4 +1,4 @@
-import { type CheckEmployeeByEmailRepository } from '../protocols/db/check-employee-by-email-repository'
+import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository } from '../protocols'
 
 export const CheckEmployeeByEmailRepositorySpy = (): CheckEmployeeByEmailRepository => {
   class CheckEmployeeByEmailRepositorySpy implements CheckEmployeeByEmailRepository {
@@ -7,4 +7,14 @@ export const CheckEmployeeByEmailRepositorySpy = (): CheckEmployeeByEmailReposit
     }
   }
   return new CheckEmployeeByEmailRepositorySpy()
+}
+
+export const AddEmployeeRepositorySpy = (): AddEmployeeRepository => {
+  class AddEmployeeRepositorySpy implements AddEmployeeRepository {
+    async add (employee: AddEmployeeRepository.Params): Promise<boolean> {
+      return await Promise.resolve(true)
+    }
+  }
+
+  return new AddEmployeeRepositorySpy()
 }
