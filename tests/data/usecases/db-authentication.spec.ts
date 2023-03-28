@@ -1,18 +1,21 @@
 import { mockAuthenticationParams, throwError } from './../../domain/mocks'
-import { type LoadEmployeeByEmailRepository } from '../../../src/data/protocols'
+import { type LoadEmployeeByEmailRepository, type HashComparer } from '../../../src/data/protocols'
 import { DbAuthentication } from '../../../src/data/usecases'
-import { LoadEmployeeByEmailRepositorySpy } from '../mocks'
+import { LoadEmployeeByEmailRepositorySpy, HashComparerSpy } from '../mocks'
 type SutTypes = {
   sut: DbAuthentication
   loadEmployeeByEmailRepositorySpy: LoadEmployeeByEmailRepository
+  hashComparerSpy: HashComparer
 }
 
 const makeSut = (): SutTypes => {
   const loadEmployeeByEmailRepositorySpy = LoadEmployeeByEmailRepositorySpy()
-  const sut = new DbAuthentication(loadEmployeeByEmailRepositorySpy)
+  const hashComparerSpy = HashComparerSpy()
+  const sut = new DbAuthentication(loadEmployeeByEmailRepositorySpy, hashComparerSpy)
   return {
     sut,
-    loadEmployeeByEmailRepositorySpy
+    loadEmployeeByEmailRepositorySpy,
+    hashComparerSpy
   }
 }
 
@@ -38,6 +41,16 @@ describe('DbAuthentication', () => {
       jest.spyOn(loadEmployeeByEmailRepositorySpy, 'loadByEmail').mockReturnValueOnce(Promise.resolve(null))
       const auth = await sut.auth(mockAuthenticationParams())
       expect(auth).toBeNull()
+    })
+  })
+
+  describe('HashComparer', () => {
+    it('Should call HashComparer with correct values', async () => {
+      const { sut, hashComparerSpy } = makeSut()
+      const compareSpy = jest.spyOn(hashComparerSpy, 'compare')
+      await sut.auth(mockAuthenticationParams())
+      expect(compareSpy).toHaveBeenCalledTimes(1)
+      expect(compareSpy).toHaveBeenCalledWith(mockAuthenticationParams().password, 'hashed_value')
     })
   })
 })

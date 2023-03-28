@@ -1,4 +1,4 @@
-import { type LoadEmployeeByEmailRepository } from '../../../src/data/protocols'
+import { type LoadEmployeeByEmailRepository, type HashComparer } from '../../../src/data/protocols'
 export const LoadEmployeeByEmailRepositorySpy = (): LoadEmployeeByEmailRepository => {
   class LoadEmployeeByEmailRepositorySpy implements LoadEmployeeByEmailRepository {
     async loadByEmail (email: string): Promise<LoadEmployeeByEmailRepository.Result> {
@@ -9,4 +9,13 @@ export const LoadEmployeeByEmailRepositorySpy = (): LoadEmployeeByEmailRepositor
     }
   }
   return new LoadEmployeeByEmailRepositorySpy()
+}
+
+export const HashComparerSpy = (): HashComparer => {
+  class HashComparerSpy implements HashComparer {
+    async compare (value: string, hash: string): Promise<boolean> {
+      return await Promise.resolve(true)
+    }
+  }
+  return new HashComparerSpy()
 }
