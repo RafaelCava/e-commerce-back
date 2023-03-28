@@ -1,3 +1,4 @@
+import { throwError } from './../../domain/mocks'
 import { BcryptAdapter } from '../../../src/infra/criptography'
 import bcrypt from 'bcrypt'
 
@@ -31,6 +32,13 @@ describe('bcrypt adapter', () => {
       const sut = makeSut(salt)
       const hash = await sut.hash('any_value')
       expect(hash).toBe('hash')
+    })
+
+    test('should throw if bcrypt throws', async () => {
+      const sut = makeSut(salt)
+      jest.spyOn(bcrypt, 'hash').mockImplementationOnce(throwError)
+      const promise = sut.hash('any_value')
+      await expect(promise).rejects.toThrow()
     })
   })
 })
