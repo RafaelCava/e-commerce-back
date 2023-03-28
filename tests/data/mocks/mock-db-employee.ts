@@ -3,7 +3,7 @@ import { type CheckEmployeeByEmailRepository } from '../protocols/db/check-emplo
 export const CheckEmployeeByEmailRepositorySpy = (): CheckEmployeeByEmailRepository => {
   class CheckEmployeeByEmailRepositorySpy implements CheckEmployeeByEmailRepository {
     async checkByEmail (email: string): Promise<boolean> {
-      return await Promise.resolve(true)
+      return await Promise.resolve(false)
     }
   }
   return new CheckEmployeeByEmailRepositorySpy()

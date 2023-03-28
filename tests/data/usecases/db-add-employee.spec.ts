@@ -33,5 +33,12 @@ describe('DbAddAccount UseCase', () => {
       const result = sut.add(mockAddEmployeeParams())
       await expect(result).rejects.toThrow()
     })
+
+    it('Should return false if CheckEmployeeByEmailRepository returns true', async () => {
+      const { sut, checkEmployeeByEmailRepositorySpy } = makeSut()
+      jest.spyOn(checkEmployeeByEmailRepositorySpy, 'checkByEmail').mockReturnValueOnce(Promise.resolve(true))
+      const isValid = await sut.add(mockAddEmployeeParams())
+      expect(isValid).toBe(false)
+    })
   })
 })
