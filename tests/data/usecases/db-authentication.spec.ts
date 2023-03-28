@@ -1,24 +1,27 @@
 import { mockAuthenticationParams, throwError } from '../../domain/mocks'
-import { type LoadEmployeeByEmailRepository, type HashComparer, type Encrypter } from '../../../src/data/protocols'
+import { type LoadEmployeeByEmailRepository, type HashComparer, type Encrypter, type UpdateAccessTokenRepository } from '../../../src/data/protocols'
 import { DbAuthentication } from '../../../src/data/usecases'
-import { LoadEmployeeByEmailRepositorySpy, HashComparerSpy, EncrypterSpy } from '../mocks'
+import { LoadEmployeeByEmailRepositorySpy, HashComparerSpy, EncrypterSpy, UpdateAccessTokenRepositorySpy } from '../mocks'
 type SutTypes = {
   sut: DbAuthentication
   loadEmployeeByEmailRepositorySpy: LoadEmployeeByEmailRepository
   hashComparerSpy: HashComparer
   encrypterSpy: Encrypter
+  updateAccessTokenRepositorySpy: UpdateAccessTokenRepository
 }
 
 const makeSut = (): SutTypes => {
   const loadEmployeeByEmailRepositorySpy = LoadEmployeeByEmailRepositorySpy()
   const hashComparerSpy = HashComparerSpy()
   const encrypterSpy = EncrypterSpy()
-  const sut = new DbAuthentication(loadEmployeeByEmailRepositorySpy, hashComparerSpy, encrypterSpy)
+  const updateAccessTokenRepositorySpy = UpdateAccessTokenRepositorySpy()
+  const sut = new DbAuthentication(loadEmployeeByEmailRepositorySpy, hashComparerSpy, encrypterSpy, updateAccessTokenRepositorySpy)
   return {
     sut,
     loadEmployeeByEmailRepositorySpy,
     hashComparerSpy,
-    encrypterSpy
+    encrypterSpy,
+    updateAccessTokenRepositorySpy
   }
 }
 
@@ -85,6 +88,16 @@ describe('DbAuthentication', () => {
       jest.spyOn(encrypterSpy, 'encrypt').mockImplementationOnce(throwError)
       const result = sut.auth(mockAuthenticationParams())
       await expect(result).rejects.toThrow()
+    })
+  })
+
+  describe('UpdateAccessTokenRepository', () => {
+    it('Should calls UpdateAccessTokenRepository with correct values', async () => {
+      const { sut, updateAccessTokenRepositorySpy } = makeSut()
+      const updateAccessTokenSpy = jest.spyOn(updateAccessTokenRepositorySpy, 'updateAccessToken')
+      await sut.auth(mockAuthenticationParams())
+      expect(updateAccessTokenSpy).toHaveBeenCalledTimes(1)
+      expect(updateAccessTokenSpy).toHaveBeenCalledWith('any_id', 'encrypt_value')
     })
   })
 })
