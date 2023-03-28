@@ -1,18 +1,21 @@
 import { DbAddCompany } from '../../../src/data/usecases'
-import { CheckCompanyByEmailRepositorySpy } from './../mocks'
-import { type CheckCompanyByEmailRepository } from '../../../src/data/protocols'
+import { CheckCompanyByEmailRepositorySpy, AddCompanyRepositorySpy } from './../mocks'
+import { type CheckCompanyByEmailRepository, type AddCompanyRepository } from '../../../src/data/protocols'
 import { mockAddCompanyParams, throwError } from '../../domain/mocks'
 type SutTypes = {
   sut: DbAddCompany
   checkCompanyByEmailRepositorySpy: CheckCompanyByEmailRepository
+  addCompanyRepositorySpy: AddCompanyRepository
 }
 
 const makeSut = (): SutTypes => {
   const checkCompanyByEmailRepositorySpy = CheckCompanyByEmailRepositorySpy()
-  const sut = new DbAddCompany(checkCompanyByEmailRepositorySpy)
+  const addCompanyRepositorySpy = AddCompanyRepositorySpy()
+  const sut = new DbAddCompany(checkCompanyByEmailRepositorySpy, addCompanyRepositorySpy)
   return {
     sut,
-    checkCompanyByEmailRepositorySpy
+    checkCompanyByEmailRepositorySpy,
+    addCompanyRepositorySpy
   }
 }
 
@@ -38,6 +41,16 @@ describe('DbAddCompany UseCase', () => {
       jest.spyOn(checkCompanyByEmailRepositorySpy, 'checkByEmail').mockReturnValueOnce(Promise.resolve(true))
       const isValid = await sut.add(mockAddCompanyParams())
       expect(isValid).toBeNull()
+    })
+  })
+
+  describe('AddCompanyRepository', () => {
+    it('Should call AddCompanyRepository with correct values', async () => {
+      const { sut, addCompanyRepositorySpy } = makeSut()
+      const addSpy = jest.spyOn(addCompanyRepositorySpy, 'add')
+      await sut.add(mockAddCompanyParams())
+      expect(addSpy).toHaveBeenCalledTimes(1)
+      expect(addSpy).toHaveBeenCalledWith(mockAddCompanyParams())
     })
   })
 })
