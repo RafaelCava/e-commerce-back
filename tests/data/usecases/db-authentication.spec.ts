@@ -1,4 +1,4 @@
-import { mockAuthenticationParams } from './../../domain/mocks'
+import { mockAuthenticationParams, throwError } from './../../domain/mocks'
 import { type LoadEmployeeByEmailRepository } from '../../../src/data/protocols'
 import { DbAuthentication } from '../../../src/data/usecases'
 import { LoadEmployeeByEmailRepositorySpy } from '../mocks'
@@ -24,6 +24,13 @@ describe('DbAuthentication', () => {
       await sut.auth(mockAuthenticationParams())
       expect(loadByEmailSpy).toHaveBeenCalledTimes(1)
       expect(loadByEmailSpy).toHaveBeenCalledWith(mockAuthenticationParams().email)
+    })
+
+    it('Should throw if LoadEmployeeByEmailRepository throws', async () => {
+      const { sut, loadEmployeeByEmailRepositorySpy } = makeSut()
+      jest.spyOn(loadEmployeeByEmailRepositorySpy, 'loadByEmail').mockImplementationOnce(throwError)
+      const result = sut.auth(mockAuthenticationParams())
+      await expect(result).rejects.toThrow()
     })
   })
 })
