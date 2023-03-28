@@ -52,5 +52,12 @@ describe('DbAddCompany UseCase', () => {
       expect(addSpy).toHaveBeenCalledTimes(1)
       expect(addSpy).toHaveBeenCalledWith(mockAddCompanyParams())
     })
+
+    it('Should throw if AddCompanyRepository throws', async () => {
+      const { sut, addCompanyRepositorySpy } = makeSut()
+      jest.spyOn(addCompanyRepositorySpy, 'add').mockImplementationOnce(throwError)
+      const promise = sut.add(mockAddCompanyParams())
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
