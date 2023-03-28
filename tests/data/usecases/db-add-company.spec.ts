@@ -32,5 +32,12 @@ describe('DbAddCompany UseCase', () => {
       const promise = sut.add(mockAddCompanyParams())
       await expect(promise).rejects.toThrow()
     })
+
+    it('Should return null if CheckCompanyByEmailRepository returns true', async () => {
+      const { sut, checkCompanyByEmailRepositorySpy } = makeSut()
+      jest.spyOn(checkCompanyByEmailRepositorySpy, 'checkByEmail').mockReturnValueOnce(Promise.resolve(true))
+      const isValid = await sut.add(mockAddCompanyParams())
+      expect(isValid).toBeNull()
+    })
   })
 })
