@@ -75,5 +75,12 @@ describe('DbAddAccount UseCase', () => {
       expect(addSpy).toHaveBeenCalledTimes(1)
       expect(addSpy).toHaveBeenCalledWith(mockParams)
     })
+
+    it('Should throw if AddEmployeeRepository throws', async () => {
+      const { sut, addEmployeeRepositorySpy } = makeSut()
+      jest.spyOn(addEmployeeRepositorySpy, 'add').mockImplementationOnce(throwError)
+      const result = sut.add(mockAddEmployeeParams())
+      await expect(result).rejects.toThrow()
+    })
   })
 })
