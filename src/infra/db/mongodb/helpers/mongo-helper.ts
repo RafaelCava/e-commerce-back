@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 export class MongoHelper {
   static client: mongoose.Connection = null
   static async connect (uri: string): Promise<void> {
+    if ([1, 2].includes(this.client?.readyState)) return
     this.client = mongoose.createConnection(uri)
     this.startListeners()
     await this.client.asPromise()
@@ -10,7 +11,9 @@ export class MongoHelper {
 
   static startListeners (): void {
     if (process.env.NODE_ENV === 'development') {
+      /* istanbul ignore next */
       this.client.on('connected', () => { console.log('MongoDB connected') })
+      /* istanbul ignore next */
       this.client.on('disconnected', () => { console.log('MongoDB disconnected') })
     }
   }
