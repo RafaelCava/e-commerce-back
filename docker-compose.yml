@@ -21,3 +21,18 @@ services:
       - kong-fc
     extra_hosts:
       - host.docker.internal:host-gateway
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    container_name: mongo-test
+    volumes:
+      - ./data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - kong-fc
+    extra_hosts:
+      - host.docker.internal:host-gateway

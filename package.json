@@ -15,7 +15,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.4.2",
     "@types/jsonwebtoken": "^9.0.1",
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -43,8 +43,8 @@
     "start": "node dist/main/server.js",
     "start:debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "start:dev": "sucrase-node src/main/server.ts",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test": "NODE_ENV=test jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "NODE_ENV=test jest --passWithNoTests --runInBand",
     "test:unit": "yarn test:verbose --watch -c jest-unit.config.js",
     "test:integration": "yarn test:verbose --watch -c jest-integration.config.js",
     "test:cov": "rimraf coverage && yarn test --coverage",
@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3"
   }
 }

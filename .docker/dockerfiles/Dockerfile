@@ -1,6 +1,6 @@
-FROM node:16-alpine
+FROM node:16
 
-RUN apk add bash git
+RUN apt-get install bash git -y
 
 WORKDIR /usr/e-commerce-back/app
 
