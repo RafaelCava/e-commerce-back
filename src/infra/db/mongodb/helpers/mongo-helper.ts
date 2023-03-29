@@ -19,7 +19,7 @@ export class MongoHelper {
   }
 
   static async disconnect (): Promise<void> {
-    await this.client.destroy()
+    await this.client.close()
   }
 
   static getModel<T> (model: string, schema: any): mongoose.Model<T> {

@@ -35,9 +35,9 @@ describe('Mongo Helper', () => {
       await MongoHelper.disconnect()
     })
 
-    it('Should call destroy with disconnect are used', async () => {
+    it('Should call close with disconnect are used', async () => {
       await MongoHelper.connect(process.env.MONGO_URL)
-      const destroySpy = jest.spyOn(MongoHelper.client, 'destroy')
+      const destroySpy = jest.spyOn(MongoHelper.client, 'close')
       await MongoHelper.disconnect()
       expect(destroySpy).toHaveBeenCalledTimes(1)
     })
