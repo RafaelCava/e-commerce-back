@@ -8,8 +8,10 @@
     "baseUrl": "src",
     "allowJs": true,
     "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "paths": {
+      "@/tests/*": ["../tests/*"],
+      "@/*": ["*"]
+    }
   },
   "include": ["src", "tests"],
   "exclude": []

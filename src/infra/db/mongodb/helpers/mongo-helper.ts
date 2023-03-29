@@ -19,7 +19,7 @@ export class MongoHelper {
     await this.client.destroy()
   }
 
-  static getModel (model: string, schema: any): mongoose.Model<any> {
+  static getModel<T> (model: string, schema: any): mongoose.Model<T> {
     return this.client.model(model, schema)
   }
 }

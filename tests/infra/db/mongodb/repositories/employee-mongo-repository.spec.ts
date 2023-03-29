@@ -3,7 +3,7 @@ import { Employee } from '../../../../../src/infra/db/mongodb/schemas'
 import { EmployeeMongoRepository } from './../../../../../src/infra/db/mongodb/repositories'
 import { mockAddEmployeeParams } from '../../../../domain/mocks'
 import { MongoHelper } from '../../../../../src/infra/db/mongodb/helpers/mongo-helper'
-import { type Model } from 'mongoose'
+import { type Model, Types } from 'mongoose'
 
 let employeeCollection: Model<EmployeeModel>
 
@@ -29,8 +29,11 @@ describe('Employee Mongo Repository', () => {
     it('Should return true on add success', async () => {
       const sut = makeSut()
       const addEmployeeParams = mockAddEmployeeParams()
+      addEmployeeParams.company = String(new Types.ObjectId())
       const isCreated = await sut.add(addEmployeeParams)
+      const employee = await employeeCollection.findOne({ email: addEmployeeParams.email }, { _id: 1 })
       expect(isCreated).toBe(true)
+      expect(employee).toBeTruthy()
     })
   })
 })

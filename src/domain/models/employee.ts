@@ -6,7 +6,13 @@ export interface Employee {
 
   password: string
 
+  company: string | object
+
   logo?: string
 
   role: Roles
+
+  createdAt: Date
+
+  updatedAt: Date
 }

@@ -3,11 +3,27 @@ import { Roles } from '../../../../domain/enums'
 import { Schema } from 'mongoose'
 
 export const Employee = new Schema<EmployeeModel>({
-  name: String,
+  name: {
+    type: String,
+    required: true
+  },
 
-  email: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
 
-  password: String,
+  password: {
+    type: String,
+    required: true
+  },
+
+  company: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Companies'
+  },
 
   logo: String,
 
