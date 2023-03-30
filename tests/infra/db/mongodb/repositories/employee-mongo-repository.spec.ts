@@ -46,5 +46,11 @@ describe('Employee Mongo Repository', () => {
       const isEmailInUse = await sut.checkByEmail(addEmployeeParams.email)
       expect(isEmailInUse).toBe(true)
     })
+
+    it('Should return false if email is not use', async () => {
+      const sut = makeSut()
+      const isEmailInUse = await sut.checkByEmail('any_mail@mail.com')
+      expect(isEmailInUse).toBe(false)
+    })
   })
 })

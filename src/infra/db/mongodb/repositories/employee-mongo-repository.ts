@@ -11,6 +11,8 @@ export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmpl
   }
 
   async checkByEmail (email: string): Promise<CheckEmployeeByEmailRepository.Result> {
-    return await Promise.resolve(true)
+    const employeeCollection = MongoHelper.getModel<EmployeeModel>('Employee', Employee)
+    const emailAlreadyInUse = await employeeCollection.findOne({ email }, { _id: 1 })
+    return !!emailAlreadyInUse
   }
 }
