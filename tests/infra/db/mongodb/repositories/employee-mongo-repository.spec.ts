@@ -36,4 +36,15 @@ describe('Employee Mongo Repository', () => {
       expect(employee).toBeTruthy()
     })
   })
+
+  describe('checkByEmail()', () => {
+    it('Should return true if email is already in use', async () => {
+      const sut = makeSut()
+      const addEmployeeParams = mockAddEmployeeParams()
+      addEmployeeParams.company = String(new Types.ObjectId())
+      await employeeCollection.create(addEmployeeParams)
+      const isEmailInUse = await sut.checkByEmail(addEmployeeParams.email)
+      expect(isEmailInUse).toBe(true)
+    })
+  })
 })
