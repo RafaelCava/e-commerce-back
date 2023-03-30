@@ -1,4 +1,4 @@
-import { mockAuthenticationParams, throwError } from '../../domain/mocks'
+import { mockAuthenticationParams, throwError, mockEmployee } from '../../domain/mocks'
 import { type LoadEmployeeByEmailRepository, type HashComparer, type Encrypter, type UpdateAccessTokenRepository } from '../../../src/data/protocols'
 import { DbAuthentication } from '../../../src/data/usecases'
 import { LoadEmployeeByEmailRepositorySpy, HashComparerSpy, EncrypterSpy, UpdateAccessTokenRepositorySpy } from '../mocks'
@@ -56,7 +56,7 @@ describe('DbAuthentication', () => {
       const compareSpy = jest.spyOn(hashComparerSpy, 'compare')
       await sut.auth(mockAuthenticationParams())
       expect(compareSpy).toHaveBeenCalledTimes(1)
-      expect(compareSpy).toHaveBeenCalledWith(mockAuthenticationParams().password, 'hashed_value')
+      expect(compareSpy).toHaveBeenCalledWith(mockAuthenticationParams().password, mockEmployee().password)
     })
 
     it('Should throw if HashComparer throws', async () => {

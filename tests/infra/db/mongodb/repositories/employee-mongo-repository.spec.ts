@@ -53,4 +53,12 @@ describe('Employee Mongo Repository', () => {
       expect(isEmailInUse).toBe(false)
     })
   })
+
+  describe('loadByEmail()', () => {
+    it('Should return null if email is not use', async () => {
+      const sut = makeSut()
+      const isEmailInUse = await sut.loadByEmail('any_mail@mail.com')
+      expect(isEmailInUse).toBeNull()
+    })
+  })
 })

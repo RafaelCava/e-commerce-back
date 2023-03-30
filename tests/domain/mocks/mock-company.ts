@@ -1,4 +1,4 @@
-import { type AddCompany } from '../usecases'
+import { type AddCompany } from '../../../src/domain/usecases'
 
 export const mockAddCompanyParams = (): AddCompany.Params => ({
   email: 'any_mail@mail.com',

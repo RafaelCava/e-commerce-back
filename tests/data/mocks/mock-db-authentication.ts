@@ -1,12 +1,9 @@
+import { mockEmployee } from '../../domain/mocks/mock-employee'
 import { type LoadEmployeeByEmailRepository, type HashComparer, type UpdateAccessTokenRepository } from '../../../src/data/protocols'
 export const LoadEmployeeByEmailRepositorySpy = (): LoadEmployeeByEmailRepository => {
   class LoadEmployeeByEmailRepositorySpy implements LoadEmployeeByEmailRepository {
     async loadByEmail (email: string): Promise<LoadEmployeeByEmailRepository.Result> {
-      return await Promise.resolve({
-        id: 'any_id',
-        password: 'hashed_value',
-        name: 'any_name'
-      })
+      return await Promise.resolve(mockEmployee())
     }
   }
   return new LoadEmployeeByEmailRepositorySpy()

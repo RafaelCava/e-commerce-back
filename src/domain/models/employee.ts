@@ -1,5 +1,7 @@
 import { type Roles } from '../enums'
 export interface Employee {
+  id: string
+
   name: string
 
   email: string
@@ -12,7 +14,7 @@ export interface Employee {
 
   role: Roles
 
-  createdAt: Date
+  createdAt?: Date
 
-  updatedAt: Date
+  updatedAt?: Date
 }

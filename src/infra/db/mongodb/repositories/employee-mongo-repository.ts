@@ -1,9 +1,9 @@
 import { type Employee as EmployeeModel } from '../../../../domain/models'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { Employee } from '../schemas'
-import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository } from '../../../../data/protocols/db'
+import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository, type LoadEmployeeByEmailRepository } from '../../../../data/protocols/db'
 import mongoose from 'mongoose'
-export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmployeeByEmailRepository {
+export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmployeeByEmailRepository, LoadEmployeeByEmailRepository {
   async add (employee: AddEmployeeRepository.Params): Promise<AddEmployeeRepository.Result> {
     const employeeCollection = MongoHelper.getModel<EmployeeModel>('Employee', Employee)
     employee = Object.assign({}, employee, { company: new mongoose.Types.ObjectId(employee.company) })
@@ -14,5 +14,9 @@ export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmpl
     const employeeCollection = MongoHelper.getModel<EmployeeModel>('Employee', Employee)
     const emailAlreadyInUse = await employeeCollection.findOne({ email }, { _id: 1 })
     return !!emailAlreadyInUse
+  }
+
+  async loadByEmail (email: string): Promise<LoadEmployeeByEmailRepository.Result> {
+    return await Promise.resolve(null)
   }
 }
