@@ -1,7 +1,7 @@
 import { type Employee as EmployeeModel } from '../../../../../src/domain/models'
 import { Employee } from '../../../../../src/infra/db/mongodb/schemas'
 import { EmployeeMongoRepository } from './../../../../../src/infra/db/mongodb/repositories'
-import { mockAddEmployeeParams } from '../../../../domain/mocks'
+import { mockAddEmployeeParams, mockEmployee, throwError } from '../../../../domain/mocks'
 import { MongoHelper } from '../../../../../src/infra/db/mongodb/helpers/mongo-helper'
 import { type Model, Types } from 'mongoose'
 
@@ -52,13 +52,37 @@ describe('Employee Mongo Repository', () => {
       const isEmailInUse = await sut.checkByEmail('any_mail@mail.com')
       expect(isEmailInUse).toBe(false)
     })
+
+    it('Should throws if checkByEmail throws', async () => {
+      const sut = makeSut()
+      jest.spyOn(employeeCollection, 'findOne').mockImplementationOnce(throwError)
+      const promise = sut.checkByEmail('any_value')
+      await expect(promise).rejects.toThrow()
+    })
   })
 
   describe('loadByEmail()', () => {
     it('Should return null if email is not use', async () => {
       const sut = makeSut()
-      const isEmailInUse = await sut.loadByEmail('any_mail@mail.com')
-      expect(isEmailInUse).toBeNull()
+      const employee = await sut.loadByEmail('any_mail@mail.com')
+      expect(employee).toBeNull()
+    })
+
+    it('Should return Employee on succeed', async () => {
+      const sut = makeSut()
+      const employeeMocked = mockEmployee()
+      employeeMocked.company = String(new Types.ObjectId())
+      let employeeCreated = await employeeCollection.create(employeeMocked)
+      employeeCreated = MongoHelper.map(employeeCreated.toObject())
+      const employee = await sut.loadByEmail(employeeMocked.email)
+      expect(employee).toEqual(employeeCreated)
+    })
+
+    it('Should throws if loadByEmail throws', async () => {
+      const sut = makeSut()
+      jest.spyOn(employeeCollection, 'findOne').mockImplementationOnce(throwError)
+      const promise = sut.loadByEmail('any_value')
+      await expect(promise).rejects.toThrow()
     })
   })
 })

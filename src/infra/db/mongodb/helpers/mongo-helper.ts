@@ -25,4 +25,12 @@ export class MongoHelper {
   static getModel<T> (model: string, schema: any): mongoose.Model<T> {
     return this.client.model(model, schema)
   }
+
+  static map<T = any> (collection: any): T {
+    if (collection?.length) {
+      return collection.map((c: any) => this.map(c))
+    }
+    const { _id, ...collectionWithoutId } = collection
+    return Object.assign({}, collectionWithoutId, { id: _id })
+  }
 }

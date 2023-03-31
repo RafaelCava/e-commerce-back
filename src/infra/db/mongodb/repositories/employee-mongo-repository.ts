@@ -17,6 +17,9 @@ export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmpl
   }
 
   async loadByEmail (email: string): Promise<LoadEmployeeByEmailRepository.Result> {
-    return await Promise.resolve(null)
+    const employeeCollection = MongoHelper.getModel<EmployeeModel>('Employee', Employee)
+    const employee = await employeeCollection.findOne({ email }).lean()
+    if (!employee) return null
+    return await MongoHelper.map(employee)
   }
 }
