@@ -4,6 +4,7 @@ import { EmployeeMongoRepository } from './../../../../../src/infra/db/mongodb/r
 import { mockAddEmployeeParams, mockEmployee, throwError } from '../../../../domain/mocks'
 import { MongoHelper } from '../../../../../src/infra/db/mongodb/helpers/mongo-helper'
 import { type Model, Types } from 'mongoose'
+import MockDate from 'mockdate'
 
 let employeeCollection: Model<EmployeeModel>
 
@@ -21,8 +22,13 @@ describe('Employee Mongo Repository', () => {
   })
 
   beforeEach(async () => {
+    MockDate.set(new Date())
     employeeCollection = MongoHelper.getModel('Employee', Employee)
     await employeeCollection.deleteMany({})
+  })
+
+  afterEach(() => {
+    MockDate.reset()
   })
 
   describe('add()', () => {
