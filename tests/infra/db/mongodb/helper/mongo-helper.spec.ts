@@ -42,4 +42,53 @@ describe('Mongo Helper', () => {
       expect(destroySpy).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('map()', () => {
+    it('Should return a mapped object', () => {
+      const stub = {
+        _id: 'any_id',
+        any_field: 'any_value'
+      }
+
+      const stubMapped = {
+        id: 'any_id',
+        any_field: 'any_value'
+      }
+      const objectMapped = MongoHelper.map(stub)
+      expect(objectMapped).toEqual(stubMapped)
+    })
+
+    it('Should return a mapped collection', () => {
+      const stub = [{
+        _id: 'any_id',
+        any_field: 'any_value'
+      }, {
+        _id: 'any_id_2',
+        any_field: 'any_value_2'
+      }]
+
+      const stubMapped = [{
+        id: 'any_id',
+        any_field: 'any_value'
+      }, {
+        id: 'any_id_2',
+        any_field: 'any_value_2'
+      }]
+      const collectionMapped = MongoHelper.map(stub)
+      expect(collectionMapped).toEqual(stubMapped)
+    })
+
+    it('Should call map some times if collection are provided', () => {
+      const mapSpy = jest.spyOn(MongoHelper, 'map')
+      const stub = [{
+        _id: 'any_id',
+        any_field: 'any_value'
+      }, {
+        _id: 'any_id_2',
+        any_field: 'any_value_2'
+      }]
+      MongoHelper.map(stub)
+      expect(mapSpy).toHaveBeenCalledTimes(3)
+    })
+  })
 })

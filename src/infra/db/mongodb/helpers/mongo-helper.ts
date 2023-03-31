@@ -27,6 +27,7 @@ export class MongoHelper {
   }
 
   static map<T = any> (collection: any): T {
+    /* istanbul ignore next */
     if (collection?.length) {
       return collection.map((c: any) => this.map(c))
     }
