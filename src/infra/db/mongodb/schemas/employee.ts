@@ -30,6 +30,11 @@ export const Employee = new Schema<EmployeeModel>({
   role: {
     type: String,
     default: Roles.EMPLOYEE
+  },
+
+  accessToken: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: true

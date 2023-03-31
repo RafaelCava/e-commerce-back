@@ -85,4 +85,24 @@ describe('Employee Mongo Repository', () => {
       await expect(promise).rejects.toThrow()
     })
   })
+
+  describe('updateAccessToken()', () => {
+    it('Should update the employee accessToken on updateAccessToken success', async () => {
+      const sut = makeSut()
+      const employeeMocked = mockEmployee()
+      employeeMocked.company = String(new Types.ObjectId())
+      let employeeCreated = await employeeCollection.create(employeeMocked)
+      employeeCreated = MongoHelper.map(employeeCreated.toObject())
+      await sut.updateAccessToken(employeeCreated.id, 'any_token_2')
+      const employee = await employeeCollection.findOne({ _id: employeeCreated.id })
+      expect(employee.accessToken).toBe('any_token_2')
+    })
+
+    it('Should throws if updateAccessToken throws', async () => {
+      const sut = makeSut()
+      jest.spyOn(employeeCollection, 'updateOne').mockImplementationOnce(throwError)
+      const promise = sut.updateAccessToken('any_value', 'any_value')
+      await expect(promise).rejects.toThrow()
+    })
+  })
 })

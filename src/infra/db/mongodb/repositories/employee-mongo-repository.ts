@@ -1,9 +1,9 @@
 import { type Employee as EmployeeModel } from '../../../../domain/models'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { Employee } from '../schemas'
-import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository, type LoadEmployeeByEmailRepository } from '../../../../data/protocols/db'
+import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository, type LoadEmployeeByEmailRepository, type UpdateAccessTokenRepository } from '../../../../data/protocols/db'
 import mongoose from 'mongoose'
-export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmployeeByEmailRepository, LoadEmployeeByEmailRepository {
+export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmployeeByEmailRepository, LoadEmployeeByEmailRepository, UpdateAccessTokenRepository {
   async add (employee: AddEmployeeRepository.Params): Promise<AddEmployeeRepository.Result> {
     const employeeCollection = MongoHelper.getModel<EmployeeModel>('Employee', Employee)
     employee = Object.assign({}, employee, { company: new mongoose.Types.ObjectId(employee.company) })
@@ -21,5 +21,10 @@ export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmpl
     const employee = await employeeCollection.findOne({ email }).lean()
     if (!employee) return null
     return await MongoHelper.map(employee)
+  }
+
+  async updateAccessToken (id: string, token: string): Promise<void> {
+    const employeeCollection = MongoHelper.getModel<EmployeeModel>('Employee', Employee)
+    await employeeCollection.updateOne({ _id: new mongoose.Types.ObjectId(id) }, { $set: { accessToken: token } })
   }
 }

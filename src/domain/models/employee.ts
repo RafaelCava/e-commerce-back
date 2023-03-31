@@ -17,4 +17,6 @@ export interface Employee {
   createdAt?: Date
 
   updatedAt?: Date
+
+  accessToken?: string
 }

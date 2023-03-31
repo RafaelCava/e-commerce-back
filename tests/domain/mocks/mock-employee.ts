@@ -23,5 +23,6 @@ export const mockEmployee = (): Employee => ({
   createdAt: new Date(),
   updatedAt: new Date(),
   logo: 'any_logo',
-  role: Roles.EMPLOYEE
+  role: Roles.EMPLOYEE,
+  accessToken: 'any_token'
 })
