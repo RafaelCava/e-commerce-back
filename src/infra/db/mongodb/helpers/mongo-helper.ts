@@ -23,7 +23,7 @@ export class MongoHelper {
   }
 
   static getModel<T> (model: string, schema: any): mongoose.Model<T> {
-    return this.client.model(model, schema)
+    return this.client.model(model, schema) as unknown as mongoose.Model<T>
   }
 
   static map<T = any> (collection: any): T {

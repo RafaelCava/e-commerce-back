@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "baseUrl": "src",
     "allowJs": true,
-    "sourceMap": true,
+    "inlineSourceMap": true,
     "paths": {
       "@/tests/*": ["../tests/*"],
       "@/*": ["*"]
