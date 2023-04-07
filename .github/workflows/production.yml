@@ -56,7 +56,7 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/e-commerce-back:${{ env.TAG_PROJECT }}
-          file: ./.docker/Dockerfile.prod
+          file: ./.docker/dockerfiles/Dockerfile.prod
 
   coveralls:
     needs: docker-deploy
