@@ -30,7 +30,9 @@ export const Company = new Schema<CompanyModel>({
 
   logo: String,
 
-  address: Schema.Types.Mixed
+  address: Schema.Types.Mixed,
+
+  celPhone: String
 }, {
   timestamps: true
 })

@@ -18,6 +18,8 @@ export interface Company {
   plan: string
 
   active: boolean
+
+  celPhone?: string
 }
 
 export interface Address {
