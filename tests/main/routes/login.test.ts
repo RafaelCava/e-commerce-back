@@ -4,8 +4,8 @@ import { setupApp } from '@/main/config/app'
 import { type SignUpController } from '@/presentation/controllers'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Types, type Model } from 'mongoose'
-import { type Employee as EmployeeModel } from '@/domain/models'
-import { Employee } from '@/infra/db/mongodb/schemas'
+import { type Company as CompanyModel, type Employee as EmployeeModel } from '@/domain/models'
+import { Company, Employee } from '@/infra/db/mongodb/schemas'
 
 let app: Express
 
@@ -14,26 +14,34 @@ const mockRequest = (): SignUpController.Params => ({
   email: 'any_mail@mail.com',
   password: 'password_value',
   passwordConfirmation: 'password_value',
-  companyName: 'companyName_value',
-  cnpj: 'cnpj_value',
-  celPhone: 'celPhone_value'
+  companyName: 'companyName_value'
 })
 
 let employeeCollection: Model<EmployeeModel>
+let companyCollection: Model<CompanyModel>
 
 describe('Login Routes', () => {
-  beforeEach(async () => {
-    app = await setupApp()
-    employeeCollection = MongoHelper.getModel('Employee', Employee)
-    await employeeCollection.deleteMany({})
-  })
-
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    app = await setupApp()
+    employeeCollection = MongoHelper.getModel('Employee', Employee)
+    await employeeCollection.deleteMany({})
+    companyCollection = MongoHelper.getModel('Company', Company)
+    await companyCollection.deleteMany({})
+  })
+
+  afterEach(async () => {
+    employeeCollection = MongoHelper.getModel('Employee', Employee)
+    await employeeCollection.deleteMany({})
+    companyCollection = MongoHelper.getModel('Company', Company)
+    await companyCollection.deleteMany({})
   })
 
   describe('POST /signup', () => {
@@ -138,6 +146,18 @@ describe('Login Routes', () => {
           expect(res.body).toEqual({
             error: 'The received email is already in use'
           })
+        })
+    })
+
+    it('should return 200 with accessToken on succeeds', async () => {
+      const requestMocked = mockRequest()
+      await request(app)
+        .post('/api/signup')
+        .send(requestMocked)
+        .expect(200)
+        .then(res => {
+          expect(res.body.accessToken).toBeTruthy()
+          expect(res.body.name).toBe(requestMocked.name)
         })
     })
   })
