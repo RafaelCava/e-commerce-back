@@ -90,5 +90,19 @@ describe('Login Routes', () => {
           })
         })
     })
+
+    it('should return 400 if no company name is provided', async () => {
+      const requestMocked = mockRequest()
+      Reflect.deleteProperty(requestMocked, 'companyName')
+      await request(app)
+        .post('/api/signup')
+        .send(requestMocked)
+        .expect(400)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Missing param: companyName'
+          })
+        })
+    })
   })
 })
