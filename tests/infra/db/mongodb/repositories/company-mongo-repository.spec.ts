@@ -73,5 +73,12 @@ describe('Company Mongo Repository', () => {
       const exists = await sut.checkByEmail('any_value')
       expect(exists).toBe(false)
     })
+
+    it('Should throws if mongoose throws', async () => {
+      const sut = makeSut()
+      jest.spyOn(companyCollection, 'findOne').mockImplementationOnce(throwError)
+      const promise = sut.checkByEmail('any_value')
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
