@@ -1,0 +1,36 @@
+FROM node:16-alpine as install-dependencies
+
+WORKDIR /usr/e-commerce-back/app
+
+COPY package.json .
+
+RUN yarn install --silent
+
+FROM node:16-alpine as builder
+
+WORKDIR /usr/e-commerce-back/app
+
+COPY --from=install-dependencies /usr/e-commerce-back/app/node_modules ./node_modules
+
+COPY . .
+
+RUN yarn build
+
+FROM node:16-alpine as production
+
+WORKDIR /usr/e-commerce-back/app
+
+RUN apk add --no-cache bash
+
+LABEL org.opencontainers.image.authors="ra.facavalcante@hotmail.com"
+LABEL org.opencontainers.image.description = "E-commerce back-end"
+
+USER node
+
+COPY --from=builder /usr/e-commerce-back/app/dist ./dist
+COPY --from=builder /usr/e-commerce-back/app/node_modules ./node_modules
+COPY package.json .
+
+CMD [ "node", "dist/main/server.js" ]
+
+EXPOSE 3033
