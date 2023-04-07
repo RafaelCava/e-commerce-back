@@ -67,5 +67,11 @@ describe('Company Mongo Repository', () => {
       const exists = await sut.checkByEmail(mockCompany.email)
       expect(exists).toBe(true)
     })
+
+    it('Should return false if email not exists', async () => {
+      const sut = makeSut()
+      const exists = await sut.checkByEmail('any_value')
+      expect(exists).toBe(false)
+    })
   })
 })
