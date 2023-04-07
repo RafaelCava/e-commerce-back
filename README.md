@@ -16,6 +16,9 @@
 
   <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=RafaelCava_e-commerce-back&metric=alert_status">
 
+  <a href='https://coveralls.io/github/RafaelCava/e-commerce-back?branch=master'><img src='https://coveralls.io/repos/github/RafaelCava/e-commerce-back/badge.svg?branch=master' alt='Coverage Status' /></a>
+
+
   <!-- <img alt="Licença" src="https://img.shields.io/github/license/RafaelCava/e-commerce-back?color=56BEB8">
 
   <img alt="Github issues" src="https://img.shields.io/github/issues/RafaelCava/e-commerce-back?color=56BEB8" />
@@ -98,6 +101,7 @@ Este projeto está sob licença MIT. Veja o arquivo [LICENSE](LICENSE.md) para m
 
 
 Feito com :heart: por <a href="https://github.com/RafaelCava" target="_blank">Rafael Cavalcante</a>
+
 Feito com :heart: por <a href="https://github.com/julianadeveloper" target="_blank">Juliana Oliveira</a>
 
 &#xa0;
