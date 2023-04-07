@@ -55,7 +55,7 @@
     "test:cov": "rimraf coverage && yarn test --coverage",
     "build:compile": "tsc -p tsconfig-build.json",
     "build": "rimraf dist && yarn build:compile",
-    "test:staged": "yarn test --findRelatedTests"
+    "test:staged": "yarn test --findRelatedTests $(git status -s | grep -E '.(spec|test).ts$')"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
