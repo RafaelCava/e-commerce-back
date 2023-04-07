@@ -2,4 +2,10 @@
 
 yarn install
 
-yarn start:dev
+yarn husky install
+
+cp .env.example .env
+
+yarn build
+
+yarn start:debug

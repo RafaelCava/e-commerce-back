@@ -1,7 +1,7 @@
 {
   "name": "e-commerce-back",
   "version": "1.0.0",
-  "main": "dist/main/server.js",
+  "main": "index.js",
   "license": "MIT",
   "author": {
     "email": "ra.facavalcante@hotmail.com",
@@ -11,8 +11,15 @@
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
+    "@shelf/jest-mongodb": "^4.1.7",
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.17",
     "@types/jest": "^29.4.2",
-    "@types/node": "^18.15.3",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/module-alias": "^2.0.1",
+    "@types/node": "^18.15.11",
+    "@types/supertest": "^2.0.12",
+    "@types/validator": "^13.7.14",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -24,9 +31,12 @@
     "husky": "^8.0.3",
     "jest": "^29.5.0",
     "lint-staged": "^13.2.0",
+    "mockdate": "^3.0.5",
     "nodemon": "^2.0.21",
     "rimraf": "^4.4.0",
+    "source-map-support": "^0.5.21",
     "sucrase": "^3.29.0",
+    "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "typescript": "*"
   },
@@ -37,14 +47,29 @@
   },
   "scripts": {
     "start": "node dist/main/server.js",
-    "start:debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
+    "start:debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 -r source-map-support/register ./dist/main/server.js --nolazy ./dist/main/server.js",
     "start:dev": "sucrase-node src/main/server.ts",
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:verbose": "jest --passWithNoTests --runInBand",
-    "test:unit": "yarn test:verbose --watch -c jest-unit.config.js",
-    "test:integration": "yarn test:verbose --watch -c jest-integration.config.js",
+    "test": "NODE_ENV=test jest --passWithNoTests --silent --noStackTrace --runInBand --forceExit",
+    "test:verbose": "NODE_ENV=test jest --passWithNoTests --runInBand",
+    "test:unit": "yarn test --watch -c jest-unit.config.js",
+    "test:integration": "yarn test --watch -c jest-integration.config.js",
     "test:cov": "rimraf coverage && yarn test --coverage",
     "build:compile": "tsc -p tsconfig-build.json",
-    "build": "rimraf dist && yarn build:compile"
+    "build": "rimraf dist && yarn build:compile",
+    "test:staged": "yarn test --findRelatedTests $(git status -s | grep -E '.(spec|test).ts$')"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "module-alias": "^2.2.2",
+    "mongoose": "^7.0.3",
+    "validator": "^13.9.0"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }

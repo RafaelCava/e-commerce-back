@@ -2,6 +2,7 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/main/**'
   ],
   coverageDirectory: 'coverage',
@@ -9,5 +10,10 @@ module.exports = {
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'
+  },
+  preset: '@shelf/jest-mongodb',
+  moduleNameMapper: {
+    '@/tests/(.*)': '<rootDir>/tests/$1',
+    '@/(.*)': '<rootDir>/src/$1'
   }
 }
