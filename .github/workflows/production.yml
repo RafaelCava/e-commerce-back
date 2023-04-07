@@ -57,6 +57,15 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/e-commerce-back:${{ env.TAG_PROJECT }}
           file: ./.docker/dockerfiles/Dockerfile.prod
+          
+  application-deploy:
+    needs: docker-deploy
+    runs-on: ubuntu-latest
+    if: needs.docker-deploy.outputs.tag_validate == 'false'
+    steps:
+      - name: Deploy on render
+        run: |
+          curl ${{ secrets.WEBHOOK_RENDER }}
 
   coveralls:
     needs: docker-deploy
