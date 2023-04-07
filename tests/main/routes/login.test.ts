@@ -9,7 +9,7 @@ const mockRequest = (): SignUpController.Params => ({
   name: 'name_value',
   email: 'email_value',
   password: 'password_value',
-  passwordConfirmation: 'passwordConfirmation_value',
+  passwordConfirmation: 'password_value',
   companyName: 'companyName_value',
   cnpj: 'cnpj_value',
   celPhone: 'celPhone_value'
@@ -45,6 +45,20 @@ describe('Login Routes', () => {
         .then(res => {
           expect(res.body).toEqual({
             error: 'Missing param: email'
+          })
+        })
+    })
+
+    it('should return 400 if invalid email is provided', async () => {
+      const requestMocked = mockRequest()
+      requestMocked.email = 'invalid_email'
+      await request(app)
+        .post('/api/signup')
+        .send(requestMocked)
+        .expect(400)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Invalid param: email'
           })
         })
     })
