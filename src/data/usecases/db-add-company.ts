@@ -1,5 +1,5 @@
-import { type CheckCompanyByEmailRepository, type AddCompanyRepository } from '../protocols'
-import { type AddCompany } from '../../domain/usecases'
+import { type CheckCompanyByEmailRepository, type AddCompanyRepository } from '@/data/protocols'
+import { type AddCompany } from '@/domain/usecases'
 
 export class DbAddCompany implements AddCompany {
   constructor (private readonly checkCompanyByEmailRepository: CheckCompanyByEmailRepository, private readonly addCompanyRepository: AddCompanyRepository) {}

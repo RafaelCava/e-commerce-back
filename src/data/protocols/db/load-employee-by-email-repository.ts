@@ -1,4 +1,4 @@
-import { type Employee } from '../../../domain/models/employee'
+import { type Employee } from '@/domain/models/employee'
 export interface LoadEmployeeByEmailRepository {
   loadByEmail: (email: string) => Promise<LoadEmployeeByEmailRepository.Result>
 }

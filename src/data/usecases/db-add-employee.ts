@@ -1,5 +1,5 @@
-import { type CheckEmployeeByEmailRepository, type Hasher, type AddEmployeeRepository } from '../protocols'
-import { type AddEmployee } from '../../domain/usecases'
+import { type CheckEmployeeByEmailRepository, type Hasher, type AddEmployeeRepository } from '@/data/protocols'
+import { type AddEmployee } from '@/domain/usecases'
 
 export class DbAddEmployee implements AddEmployee {
   constructor (

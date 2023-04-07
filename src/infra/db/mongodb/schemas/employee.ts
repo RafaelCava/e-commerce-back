@@ -1,5 +1,5 @@
-import { type Employee as EmployeeModel } from '../../../../domain/models'
-import { Roles } from '../../../../domain/enums'
+import { type Employee as EmployeeModel } from '@/domain/models'
+import { Roles } from '@/domain/enums'
 import { Schema } from 'mongoose'
 
 export const Employee = new Schema<EmployeeModel>({

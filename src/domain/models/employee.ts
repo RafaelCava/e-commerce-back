@@ -1,4 +1,4 @@
-import { type Roles } from '../enums'
+import { type Roles } from '@/domain/enums'
 export interface Employee {
   id: string
 

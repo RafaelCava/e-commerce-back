@@ -1,7 +1,7 @@
-import { type Employee as EmployeeModel } from '../../../../domain/models'
+import { type Employee as EmployeeModel } from '@/domain/models'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { Employee } from '../schemas'
-import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository, type LoadEmployeeByEmailRepository, type UpdateAccessTokenRepository } from '../../../../data/protocols/db'
+import { type CheckEmployeeByEmailRepository, type AddEmployeeRepository, type LoadEmployeeByEmailRepository, type UpdateAccessTokenRepository } from '@/data/protocols/db'
 import mongoose from 'mongoose'
 export class EmployeeMongoRepository implements AddEmployeeRepository, CheckEmployeeByEmailRepository, LoadEmployeeByEmailRepository, UpdateAccessTokenRepository {
   async add (employee: AddEmployeeRepository.Params): Promise<AddEmployeeRepository.Result> {
