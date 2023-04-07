@@ -10,14 +10,32 @@ services:
       dockerfile: ./.docker/dockerfiles/Dockerfile
       context: .
     container_name: e-commerce-back
+    entrypoint: sh ./.docker/entrypoint.sh
     restart: "on-failure"
     environment:
       NODE_ENV: development
       PORT: 3033
+      MONGO_URL: mongodb://root:root@mongo:27017/e-commerce-back?authSource=admin
+      JWT_SECRET: tj67d6f5g4h3j2k1l
     ports:
       - 3033:3033
     volumes:
       - .:/usr/e-commerce-back/app
+    networks:
+      - kong-fc
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    container_name: mongo
+    volumes:
+      - ./data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     networks:
       - kong-fc
     extra_hosts:
