@@ -1,8 +1,13 @@
-import { ok } from '../helpers/http-helper'
-import { type HttpResponse, type Controller } from '../protocols'
+import { ok, serverError } from '../helpers/http-helper'
+import { type HttpResponse, type Controller, type Validation } from '../protocols'
 
 export class HealthCheckController implements Controller {
-  async handle (): Promise<HealthCheckController.Result> {
+  constructor (private readonly validation: Validation) {}
+  async handle (request: any): Promise<HealthCheckController.Result> {
+    const error = this.validation.validate(request)
+    if (error) {
+      return serverError(error)
+    }
     return await Promise.resolve(ok({ message: 'Server is running' }))
   }
 }

@@ -1,7 +1,7 @@
 import { SignUpController } from './../../../src/presentation/controllers'
 import { type AddEmployee, type AddCompany, type Authentication } from '../../domain/usecases'
 import { mockAddEmployeeParams, throwError, mockAuthenticationResult, mockAddCompanyParams } from '../../domain/mocks'
-import { type Validation } from '../protocols'
+import { type Validation } from '@/presentation/protocols'
 import { ServerError, EmailInUseError, MissingParamError } from '../../../src/presentation/errors'
 import { serverError, forbidden, ok, badRequest } from '../../../src/presentation/helpers/http-helper'
 import { AddEmployeeSpy, AuthenticationSpy, AddCompanySpy, mockSignUpControllerRequest, ValidationSpy } from '../mocks'
