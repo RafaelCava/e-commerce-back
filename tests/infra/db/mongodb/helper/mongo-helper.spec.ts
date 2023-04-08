@@ -96,6 +96,10 @@ describe('Mongo Helper', () => {
     it('should return true if connection is established', async () => {
       await MongoHelper.connect(process.env.MONGO_URL)
       expect(MongoHelper.isConnected()).toBeTruthy()
+      await MongoHelper.disconnect()
+    })
+    it('should return false if connection is not established', async () => {
+      expect(MongoHelper.isConnected()).toBeFalsy()
     })
   })
 })
