@@ -26,6 +26,10 @@ export class MongoHelper {
     return this.client.model(model, schema) as unknown as mongoose.Model<T>
   }
 
+  static isConnected (): boolean {
+    return this.client?.readyState === 1
+  }
+
   static map<T = any> (collection: any): T {
     /* istanbul ignore next */
     if (collection?.length) {
