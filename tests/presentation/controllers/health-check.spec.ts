@@ -1,4 +1,4 @@
-import { ok } from '@/presentation/helpers/http-helper'
+import { ok, serverError } from '@/presentation/helpers/http-helper'
 import { HealthCheckController } from '@/presentation/controllers'
 import { ValidationSpy } from '@/tests/validation/mocks'
 import { type Validation } from '@/presentation/protocols'
@@ -29,5 +29,12 @@ describe('HealthCheckController', () => {
     const validateSpy = jest.spyOn(validationSpy, 'validate')
     await sut.handle({})
     expect(validateSpy).toHaveBeenCalledWith({})
+  })
+
+  it('Should return 500 if Validation returns error', async () => {
+    const { sut, validationSpy } = makeSut()
+    jest.spyOn(validationSpy, 'validate').mockReturnValueOnce(new Error())
+    const error = await sut.handle({})
+    expect(error).toEqual(serverError(new Error()))
   })
 })
