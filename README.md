@@ -16,7 +16,7 @@
 
   <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=RafaelCava_e-commerce-back&metric=alert_status">
 
-  <a href='https://coveralls.io/github/RafaelCava/e-commerce-back?branch=master'><img src='https://coveralls.io/repos/github/RafaelCava/e-commerce-back/badge.svg?branch=master' alt='Coverage Status' /></a>
+  <img src='https://coveralls.io/repos/github/RafaelCava/e-commerce-back/badge.svg?branch=master' alt='Coverage Status' />
 
 
   <!-- <img alt="Licença" src="https://img.shields.io/github/license/RafaelCava/e-commerce-back?color=56BEB8">

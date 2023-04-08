@@ -16,7 +16,7 @@ services:
       NODE_ENV: development
       PORT: 3033
       MONGO_URL: mongodb://root:root@mongo:27017/e-commerce-back?authSource=admin
-      JWT_SECRET: tj67d6f5g4h3j2k1l
+      JWT_SECRET: qualquercoisa
     ports:
       - 3033:3033
     volumes:
