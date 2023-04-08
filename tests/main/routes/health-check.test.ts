@@ -29,5 +29,17 @@ describe('Health Check Routes', () => {
           })
         })
     })
+
+    it('should return 500 if server down or broken', async () => {
+      await MongoHelper.disconnect()
+      await request(app)
+        .get('/api/health')
+        .expect(500)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Internal error'
+          })
+        })
+    })
   })
 })
