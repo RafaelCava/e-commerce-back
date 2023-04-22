@@ -61,6 +61,7 @@
     "test:staged": "yarn test --findRelatedTests $(git status -s | grep -E '.(spec|test).ts$')"
   },
   "dependencies": {
+    "@swc/jest": "^0.2.26",
     "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
