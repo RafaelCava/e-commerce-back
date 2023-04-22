@@ -1,14 +1,17 @@
 import { type Authentication } from '@/domain/usecases'
 import { type HttpResponse, type Controller } from '../protocols'
-import { serverError } from '../helpers/http-helper'
-import { ServerError } from '../errors'
+import { ok, serverError, unauthorized } from '../helpers/http-helper'
+import { ServerError, UnauthorizedError } from '../errors'
 
 export class LoginController implements Controller {
   constructor (private readonly authentication: Authentication) {}
   async handle (request: LoginController.Request): Promise<LoginController.Result> {
     try {
-      await this.authentication.auth(request)
-      return null
+      const auth = await this.authentication.auth(request)
+      if (!auth) {
+        return unauthorized(new UnauthorizedError())
+      }
+      return ok(auth)
     } catch (error) {
       return serverError(new ServerError(error.stack))
     }

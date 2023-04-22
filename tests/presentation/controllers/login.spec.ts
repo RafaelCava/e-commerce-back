@@ -1,7 +1,7 @@
-import { mockAuthenticationParams } from '@/tests/domain/mocks'
+import { mockAuthenticationParams, mockAuthenticationResult } from '@/tests/domain/mocks'
 import { AuthenticationSpy } from '../mocks'
 import { LoginController } from '@/presentation/controllers'
-import { serverError } from '@/presentation/helpers/http-helper'
+import { ok, serverError } from '@/presentation/helpers/http-helper'
 import { ServerError } from '@/presentation/errors'
 
 type SutTypes = {
@@ -33,6 +33,12 @@ describe('Login Controller', () => {
       authenticationSpy.throwError = true
       const result = await sut.handle(mockAuthenticationParams())
       expect(result).toEqual(serverError(new ServerError(null)))
+    })
+
+    it('should return accessToken on succeeds', async () => {
+      const { sut } = makeSut()
+      const result = await sut.handle(mockAuthenticationParams())
+      expect(result).toEqual(ok(mockAuthenticationResult()))
     })
   })
 })
