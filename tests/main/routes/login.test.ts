@@ -1,21 +1,31 @@
 import request from 'supertest'
 import { type Express } from 'express'
 import { setupApp } from '@/main/config/app'
-import { type SignUpController } from '@/presentation/controllers'
+import { type LoginController, type SignUpController } from '@/presentation/controllers'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Types, type Model } from 'mongoose'
 import { type Company as CompanyModel, type Employee as EmployeeModel } from '@/domain/models'
 import { Company, Employee } from '@/infra/db/mongodb/schemas'
+import bcrypt from 'bcrypt'
 
 let app: Express
 
-const mockRequest = (): SignUpController.Params => ({
+const mockRequestSignUp = (): SignUpController.Params => ({
   name: 'name_value',
   email: 'any_mail@mail.com',
   password: 'password_value',
   passwordConfirmation: 'password_value',
   companyName: 'companyName_value'
 })
+
+const mockRequestLogin = (): LoginController.Request => ({
+  email: 'any_mail@mail.com',
+  password: 'password_value'
+})
+
+const hashValue = async (password: string): Promise<string> => {
+  return await bcrypt.hash(password, 12)
+}
 
 let employeeCollection: Model<EmployeeModel>
 let companyCollection: Model<CompanyModel>
@@ -46,7 +56,7 @@ describe('Login Routes', () => {
 
   describe('POST /signup', () => {
     it('should return 400 if no name is provided', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       Reflect.deleteProperty(requestMocked, 'name')
       await request(app)
         .post('/api/signup')
@@ -60,7 +70,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 400 if no email is provided', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       Reflect.deleteProperty(requestMocked, 'email')
       await request(app)
         .post('/api/signup')
@@ -74,7 +84,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 400 if invalid email is provided', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       requestMocked.email = 'invalid_email'
       await request(app)
         .post('/api/signup')
@@ -88,7 +98,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 400 if no password is provided', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       Reflect.deleteProperty(requestMocked, 'password')
       await request(app)
         .post('/api/signup')
@@ -102,7 +112,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 400 if no passwordConfirmation is provided', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       Reflect.deleteProperty(requestMocked, 'passwordConfirmation')
       await request(app)
         .post('/api/signup')
@@ -116,7 +126,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 400 if no company name is provided', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       Reflect.deleteProperty(requestMocked, 'companyName')
       await request(app)
         .post('/api/signup')
@@ -130,7 +140,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 403 if email are in use', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       await employeeCollection.create({
         name: 'name_value',
         email: 'any_mail@mail.com',
@@ -150,7 +160,7 @@ describe('Login Routes', () => {
     })
 
     it('should return 200 with accessToken on succeeds', async () => {
-      const requestMocked = mockRequest()
+      const requestMocked = mockRequestSignUp()
       await request(app)
         .post('/api/signup')
         .send(requestMocked)
@@ -158,6 +168,68 @@ describe('Login Routes', () => {
         .then(res => {
           expect(res.body.accessToken).toBeTruthy()
           expect(res.body.name).toBe(requestMocked.name)
+        })
+    })
+  })
+
+  describe('POST /login', () => {
+    it('should return 400 if no email is provided', async () => {
+      const requestMocked = mockRequestLogin()
+      Reflect.deleteProperty(requestMocked, 'email')
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(400)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Missing param: email'
+          })
+        })
+    })
+
+    it('should return 400 if no password is provided', async () => {
+      const requestMocked = mockRequestLogin()
+      Reflect.deleteProperty(requestMocked, 'password')
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(400)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Missing param: password'
+          })
+        })
+    })
+
+    it('should return 401 if invalid credentials are provided', async () => {
+      const requestMocked = mockRequestLogin()
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(401)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Invalid credentials'
+          })
+        })
+    })
+
+    it('should return 200 with accessToken on succeeds', async () => {
+      const requestMocked = mockRequestLogin()
+      await employeeCollection.create({
+        name: 'name_value',
+        email: requestMocked.email,
+        password: await hashValue(requestMocked.password),
+        role: 'admin',
+        company: new Types.ObjectId()
+      })
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(200)
+        .then(res => {
+          expect(res.body).toHaveProperty('accessToken')
+          expect(res.body).toHaveProperty('name')
         })
     })
   })

@@ -4,7 +4,7 @@ import { mockAddEmployeeParams, throwError, mockAuthenticationResult, mockAddCom
 import { type Validation } from '@/presentation/protocols'
 import { ServerError, EmailInUseError, MissingParamError } from '../../../src/presentation/errors'
 import { serverError, forbidden, ok, badRequest } from '../../../src/presentation/helpers/http-helper'
-import { AddEmployeeSpy, AuthenticationSpy, AddCompanySpy, mockSignUpControllerRequest, ValidationSpy } from '../mocks'
+import { AddEmployeeSpy, AuthenticationStub, AddCompanySpy, mockSignUpControllerRequest, ValidationSpy } from '../mocks'
 
 type SutTypes = {
   sut: SignUpController
@@ -18,7 +18,7 @@ const makeSut = (): SutTypes => {
   const validationSpy = ValidationSpy()
   const addEmployeeSpy = AddEmployeeSpy()
   const addCompanySpy = AddCompanySpy()
-  const authenticationSpy = AuthenticationSpy()
+  const authenticationSpy = AuthenticationStub()
   const sut = new SignUpController(validationSpy, addEmployeeSpy, addCompanySpy, authenticationSpy)
   return {
     sut,
