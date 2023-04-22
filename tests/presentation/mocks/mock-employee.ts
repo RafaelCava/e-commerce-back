@@ -24,10 +24,12 @@ export class AuthenticationSpy implements Authentication {
   params?: Authentication.Params
   counter = 0
   throwError = false
+  returnNull = false
   async auth (params: Authentication.Params): Promise<Authentication.result> {
     this.counter++
     this.params = params
     if (this.throwError) throw new Error()
+    if (this.returnNull) return null
     return await Promise.resolve(mockAuthenticationResult())
   }
 }
