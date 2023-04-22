@@ -11,11 +11,21 @@ export const AddEmployeeSpy = (): AddEmployee => {
   return new AddEmployeeSpy()
 }
 
-export const AuthenticationSpy = (): Authentication => {
+export const AuthenticationStub = (): Authentication => {
   class AuthenticationSpy implements Authentication {
     async auth (params: Authentication.Params): Promise<Authentication.result> {
       return await Promise.resolve(mockAuthenticationResult())
     }
   }
   return new AuthenticationSpy()
+}
+
+export class AuthenticationSpy implements Authentication {
+  params?: Authentication.Params
+  counter = 0
+  async auth (params: Authentication.Params): Promise<Authentication.result> {
+    this.counter++
+    this.params = params
+    return await Promise.resolve(mockAuthenticationResult())
+  }
 }
