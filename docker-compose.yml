@@ -15,7 +15,7 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3033
-      MONGO_URL: mongodb://root:root@mongo:27017/e-commerce-back?authSource=admin
+      MONGO_URL: mongodb://root:root@host.docker.internal:27017/e-commerce-back?authSource=admin
       JWT_SECRET: qualquercoisa
     ports:
       - 3033:3033
