@@ -23,9 +23,11 @@ export const AuthenticationStub = (): Authentication => {
 export class AuthenticationSpy implements Authentication {
   params?: Authentication.Params
   counter = 0
+  throwError = false
   async auth (params: Authentication.Params): Promise<Authentication.result> {
     this.counter++
     this.params = params
+    if (this.throwError) throw new Error()
     return await Promise.resolve(mockAuthenticationResult())
   }
 }

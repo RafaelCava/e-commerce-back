@@ -1,4 +1,4 @@
-import { mockAuthenticationParams, throwError } from '@/tests/domain/mocks'
+import { mockAuthenticationParams } from '@/tests/domain/mocks'
 import { AuthenticationSpy } from '../mocks'
 import { LoginController } from '@/presentation/controllers'
 import { serverError } from '@/presentation/helpers/http-helper'
@@ -30,7 +30,7 @@ describe('Login Controller', () => {
 
     it('should return serverError if authentication throws', async () => {
       const { sut, authenticationSpy } = makeSut()
-      jest.spyOn(authenticationSpy, 'auth').mockImplementationOnce(throwError)
+      authenticationSpy.throwError = true
       const result = await sut.handle(mockAuthenticationParams())
       expect(result).toEqual(serverError(new ServerError(null)))
     })
