@@ -7,7 +7,9 @@ export namespace Authentication {
     email: string
     password: string
   }
-  export type result = {
+  export type result = null | Response
+
+  type Response = {
     accessToken: string
     name: string
   }

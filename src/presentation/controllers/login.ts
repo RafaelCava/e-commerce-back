@@ -4,7 +4,11 @@ import { badRequest, ok, serverError, unauthorized } from '../helpers/http-helpe
 import { ServerError, UnauthorizedError } from '../errors'
 
 export class LoginController implements Controller {
-  constructor (private readonly validation: Validation<LoginController.Request>, private readonly authentication: Authentication) {}
+  constructor (
+    private readonly validation: Validation<LoginController.Request>,
+    private readonly authentication: Authentication
+  ) {}
+
   async handle (request: LoginController.Request): Promise<LoginController.Result> {
     try {
       const error = this.validation.validate(request)

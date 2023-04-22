@@ -1,6 +1,6 @@
 import { ok, serverError } from '@/presentation/helpers/http-helper'
 import { HealthCheckController } from '@/presentation/controllers'
-import { ValidationSpy } from '@/tests/validation/mocks'
+import { ValidationStub } from '@/tests/validation/mocks'
 import { type Validation } from '@/presentation/protocols'
 
 type SutTypes = {
@@ -9,7 +9,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const validationSpy = ValidationSpy()
+  const validationSpy = ValidationStub()
   const sut = new HealthCheckController(validationSpy)
   return {
     sut,

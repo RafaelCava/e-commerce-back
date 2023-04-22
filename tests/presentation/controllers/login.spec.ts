@@ -3,41 +3,40 @@ import { ValidationSpy } from '@/tests/validation/mocks'
 import { AuthenticationSpy } from '@/tests/presentation/mocks'
 import { LoginController } from '@/presentation/controllers'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http-helper'
-import { MissingParamError, ServerError, UnauthorizedError } from '@/presentation/errors'
-import { type Validation } from '@/presentation/protocols'
+import { ServerError, UnauthorizedError } from '@/presentation/errors'
 
 type SutTypes = {
   sut: LoginController
   authenticationSpy: AuthenticationSpy
-  validationStub: Validation
+  validationSpy: ValidationSpy
 }
 
 const makeSut = (): SutTypes => {
   const authenticationSpy = new AuthenticationSpy()
-  const validationStub = ValidationSpy()
-  const sut = new LoginController(validationStub, authenticationSpy)
+  const validationSpy = new ValidationSpy()
+  const sut = new LoginController(validationSpy, authenticationSpy)
   return {
     sut,
     authenticationSpy,
-    validationStub
+    validationSpy
   }
 }
 
 describe('Login Controller', () => {
   describe('Validation', () => {
     it('Should call Validation with correct value', async () => {
-      const { sut, validationStub } = makeSut()
-      const validateSpy = jest.spyOn(validationStub, 'validate')
+      const { sut, validationSpy } = makeSut()
       const params = mockAuthenticationParams()
       await sut.handle(params)
-      expect(validateSpy).toHaveBeenCalledWith(params)
+      expect(validationSpy.input).toEqual(params)
+      expect(validationSpy.count).toBe(1)
     })
 
-    it('Should return 400 if Validation throws an error', async () => {
-      const { sut, validationStub } = makeSut()
-      jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new MissingParamError('any_field'))
+    it('Should return badRequest if Validation return an error', async () => {
+      const { sut, validationSpy } = makeSut()
+      validationSpy.returnError = true
       const httpResponse = await sut.handle(mockAuthenticationParams())
-      expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
+      expect(httpResponse).toEqual(badRequest(new Error('any_field')))
     })
   })
   describe('authentication', () => {
