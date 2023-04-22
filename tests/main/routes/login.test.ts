@@ -6,6 +6,7 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Types, type Model } from 'mongoose'
 import { type Company as CompanyModel, type Employee as EmployeeModel } from '@/domain/models'
 import { Company, Employee } from '@/infra/db/mongodb/schemas'
+import bcrypt from 'bcrypt'
 
 let app: Express
 
@@ -21,6 +22,10 @@ const mockRequestLogin = (): LoginController.Request => ({
   email: 'any_mail@mail.com',
   password: 'password_value'
 })
+
+const hashValue = async (password: string): Promise<string> => {
+  return await bcrypt.hash(password, 12)
+}
 
 let employeeCollection: Model<EmployeeModel>
 let companyCollection: Model<CompanyModel>
@@ -206,6 +211,25 @@ describe('Login Routes', () => {
           expect(res.body).toEqual({
             error: 'Invalid credentials'
           })
+        })
+    })
+
+    it('should return 200 with accessToken on succeeds', async () => {
+      const requestMocked = mockRequestLogin()
+      await employeeCollection.create({
+        name: 'name_value',
+        email: requestMocked.email,
+        password: await hashValue(requestMocked.password),
+        role: 'admin',
+        company: new Types.ObjectId()
+      })
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(200)
+        .then(res => {
+          expect(res.body).toHaveProperty('accessToken')
+          expect(res.body).toHaveProperty('name')
         })
     })
   })
