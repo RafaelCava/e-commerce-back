@@ -181,5 +181,19 @@ describe('Login Routes', () => {
           })
         })
     })
+
+    it('should return 400 if no password is provided', async () => {
+      const requestMocked = mockRequestLogin()
+      Reflect.deleteProperty(requestMocked, 'password')
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(400)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Missing param: password'
+          })
+        })
+    })
   })
 })
