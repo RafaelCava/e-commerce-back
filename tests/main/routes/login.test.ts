@@ -195,5 +195,18 @@ describe('Login Routes', () => {
           })
         })
     })
+
+    it('should return 401 if invalid credentials are provided', async () => {
+      const requestMocked = mockRequestLogin()
+      await request(app)
+        .post('/api/login')
+        .send(requestMocked)
+        .expect(401)
+        .then(res => {
+          expect(res.body).toEqual({
+            error: 'Invalid credentials'
+          })
+        })
+    })
   })
 })
