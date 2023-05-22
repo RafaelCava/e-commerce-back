@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import env from '@/main/config/env'
 
 export class MongoHelper {
   static client: mongoose.Connection = null
@@ -11,7 +10,7 @@ export class MongoHelper {
   }
 
   static startListeners (): void {
-    if (env.environment === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       /* istanbul ignore next */
       this.client.on('connected', () => { console.log('MongoDB connected') })
       /* istanbul ignore next */
