@@ -24,7 +24,6 @@ export class LoginController implements Controller {
       }
       return ok(auth)
     } catch (error) {
-      console.error(error)
       return serverError(new ServerError(error.stack))
     }
   }
